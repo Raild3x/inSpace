@@ -2,7 +2,7 @@ package services;
 
 /**
  *
- * @author Logan
+ * @author Logan, Taylor, Sytiva
  */
 import api.AstroApi;
 import javafx.stage.Stage;
@@ -31,6 +31,7 @@ public class Main extends Application {
         //LocationApi.Test();
         //System.out.println(getLocationInfo("latitude"));
         System.out.println(AstroApi.getBodyInfo("lune"));
+        System.out.println("inSpace started!");
     }
 
 }

@@ -91,7 +91,7 @@ public class CelestialBody {
                 double x  = this.orbitingBody.getX() + this.C * zoom - (this.A * zoom);
                 double y = this.orbitingBody.getY() - (this.B * zoom);
                 if (this.boldOrbit)
-                    _gc.setLineWidth(4.0);
+                    _gc.setLineWidth(2.0);
                 _gc.strokeOval(x, y, this.A * zoom * 2, this.B * zoom * 2);
                 _gc.setLineWidth(1.0);
             }

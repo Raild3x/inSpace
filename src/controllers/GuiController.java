@@ -17,23 +17,23 @@ import services.RenderService;
  * @author szoor
  */
 public class GuiController {
-    
+
     // Background settings
-    private static final int WIDTH = 1400;
+    private static final int WIDTH = 1300;
     private static final int HEIGHT = 850;
 
     private final Canvas canvas;
     private final StackPane stackPane;
-    
+
     private File file;
     private Image image;
     private ImageView imageView;
-    
+
     protected static GuiController instance;
 
     /* 
      * Constructor for Gui Controller, set to private so it cant be accessed outside of getInstance
-    */
+     */
     private GuiController() {
         this.canvas = new Canvas();
         this.stackPane = new StackPane();
@@ -46,31 +46,42 @@ public class GuiController {
 
     /*
      * getInstance() returns the GuiController singleton and creates one to return if one does not yet exist.
-    */
+     */
     public static GuiController getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new GuiController();
+        }
         return instance;
     }
-    
+
     /*
      * Adds a gui object node (Label, Button, etc..) to the stackPane to be displayed.
      * @param _kids Varargs array of Nodes to be added.
-    */
-    public void addGuiObject(Node ..._kids) {
-        for (Node obj : _kids)
+     */
+    public void addGuiObject(Node... _kids) {
+        for (Node obj : _kids) {
             this.stackPane.getChildren().add(obj);
+        }
     }
-    
+
     /*
      * Removes a gui object node (Label, Button, etc..) from the stackPane.
      * @param _kids Varargs array of Nodes to be added.
-    */
-    public void removeGuiObject(Node ..._kids) {
-        for (Node obj : _kids)
+     */
+    public void removeGuiObject(Node... _kids) {
+        for (Node obj : _kids) {
             this.stackPane.getChildren().remove(obj);
+        }
     }
 
+    public void recenter(String name) {
+
+        RenderService.getInstance().setFocus("Sun");
+    }
+
+    public void zoomPlanet(String name) {
+        RenderService.getInstance().setFocus(name);
+    }
 
     //=================================== GETTERS ===================================//
     public StackPane getStackPane() throws URISyntaxException {
@@ -88,11 +99,8 @@ public class GuiController {
 
         switch (request) {
             case "background": //set background
-                //code if url address;
-                this.image = new Image("http://clipart-library.com/images_k/space-png-transparent/space-png-transparent-11.png");
-                //code if local file:
-//                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\NetBeansProjects\\inSpaceApp\\resources\\images\\reducedSize_dark_minimal_background2.png");
-//                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\resources\\images\\background1.png");
+                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 this.imageView.setFitHeight(this.HEIGHT);
                 this.imageView.setFitWidth(this.WIDTH);
@@ -110,25 +118,25 @@ public class GuiController {
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
-                
+
             case "Venus":
                 this.file = new File("");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
-                
+
             case "Earth":
                 this.file = new File("");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
-                
+
             case "Mars":
                 this.file = new File("");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
-                
+
             case "Jupiter":
                 this.file = new File("");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
@@ -140,7 +148,7 @@ public class GuiController {
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
-                
+
             case "Uranus":
                 this.file = new File("");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
