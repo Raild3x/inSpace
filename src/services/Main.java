@@ -2,7 +2,7 @@ package services;
 
 /**
  *
- * @author Logan
+ * @author Logan, Taylor, Sytiva
  */
 import api.AstroApi;
 import javafx.stage.Stage;
