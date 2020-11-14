@@ -112,8 +112,9 @@ public class RenderService {
             Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000 / FPS), e -> run(gc)));
             tl.setCycleCount(Timeline.INDEFINITE);
 
-            GuiController.getInstance().addGuiObject(canvas);
-            this.stage.setScene(scene);
+            GuiController.getInstance().addGuiObject(this.canvas);
+            this.scene.setFill(Color.BLACK);
+            this.stage.setScene(this.scene);
             this.stage.show();
             //begin rendering
             tl.play();
