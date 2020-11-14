@@ -132,7 +132,7 @@ public class GuiView implements HoverListener, SelectedListener {
         this.close.setStyle("-fx-background-color : grey;");
 
         this.infoPane.setStyle("-fx-background-color : silver;");
-        this.infoPane.setTranslateX(475);
+        this.infoPane.setTranslateX(450);
         this.infoPane.setTranslateY(0);
         this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 4, this.guiController.getCanvas().getHeight() - 100);
         this.infoPane.setOpacity(0.4);
