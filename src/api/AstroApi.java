@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Hashtable;
+import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -99,5 +101,23 @@ public class AstroApi {
             }
         }
         return "";
+    }
+    
+    // Converts a json string into a hashtable
+    public static Hashtable jsonToHashtable(String t) throws JSONException {
+        Hashtable<String, String> map = new Hashtable<String, String>();
+        JSONObject jObject = new JSONObject(t);
+        Iterator<?> keys = jObject.keys();
+
+        while( keys.hasNext() ){
+            String key = (String)keys.next();
+            String value = jObject.getString(key); 
+            map.put(key, value);
+
+        }
+
+        //System.out.println("json : "+jObject);
+        //System.out.println("map : "+map);
+        return map;
     }
 }
