@@ -35,10 +35,6 @@ public class CelestialBodyController {
     }
     
     //=================================== GETTERS ===================================//
-    public CelestialBody getModel() {
-        return this.model;
-    }
-    
     public double getX(){
         return this.model.getX();
     }
