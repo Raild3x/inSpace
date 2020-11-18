@@ -9,6 +9,7 @@ package services;
  *
  * @author Logan
  */
+import api.AstroApi;
 import javafx.scene.paint.Color;
 import models.CelestialBody;
 import controllers.CelestialBodyController;
@@ -18,6 +19,9 @@ import events.SelectedEvent;
 import models.InputModel;
 import views.MouseView;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONException;
 
 
 public class PlanetService{
@@ -69,6 +73,33 @@ public class PlanetService{
         initNewCelestialBody(Uranus);
         initNewCelestialBody(Neptune);
         initNewCelestialBody(Moon);
+        
+        
+        // Use api to get other planet moons
+        /*celestialBodyControllers.forEach((name,controller) -> {
+            if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
+                System.out.println(name + " isPlanet: " + AstroApi.getBodyInfo(name, "isPlanet"));
+                try {
+                    String info = AstroApi.getBodyInfo(name, "moons");
+                    if (info != "null") {
+                        info = info.substring(1,info.length()); // fix the string to be parsable
+                        System.out.println(info);
+                        Hashtable moons = AstroApi.jsonToHashtable(info);
+                        moons.forEach((data, value) -> {
+                            System.out.println(data + " : " + value);
+                            if (data == "moon") {
+                                System.out.println(value);
+                            }
+                        });
+                    } else {
+                        System.out.println(name+" has no moons.");
+                    }
+
+                } catch (JSONException ex) {
+                    Logger.getLogger(PlanetService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });*/
         
         // Set initial focus
         renderService.setFocus(getPlanetController("Sun"));
