@@ -1,4 +1,4 @@
-package astroapi;
+package api;
 
 import java.io.IOException;
 import java.io.BufferedReader;
