@@ -53,6 +53,16 @@ public class PlanetService{
         // Create celestial bodies
         CelestialBody Sun = new CelestialBody("Sun", 526.90, Color.YELLOW);//4326.90
         
+        AstroApiAdapter AstroApi = new AstroApiAdapter();
+        /*ArrayList<String> planets = AstroApi.getBodyMoons("soleil");
+        for (String planetName : planets) {
+            System.out.println(planetName+": "+AstroApi.getBodyInfo(planetName));
+            CelestialBody planet = new CelestialBody(planetName, Sun, Color.GRAY);
+            initNewCelestialBody(planet);
+        }*/
+        
+        
+        /*
         CelestialBody Mercury = new CelestialBody("Mercury", 15.16, Sun, 0.3870, 0.3788, 0.0796, Color.GRAY);
         CelestialBody Venus = new CelestialBody("Venus", 37.60, Sun, 0.7219, 0.7219, 0.0049, Color.GREEN);
         CelestialBody Earth = new CelestialBody("Earth", 39.59, Sun, 1.0027, 1.0025, 0.0167, Color.BLUE);
@@ -61,7 +71,15 @@ public class PlanetService{
         CelestialBody Saturn = new CelestialBody("Saturn", 361.84, Sun, 9.5590, 9.5231, 0.5181, Color.CHOCOLATE);
         CelestialBody Uranus = new CelestialBody("Uranus", 157.59, Sun, 19.1848, 19.1645, 0.9055, Color.AQUAMARINE);
         CelestialBody Neptune = new CelestialBody("Neptune", 152.99, Sun, 30.0806, 30.0788, 0.2687, Color.AQUA);
-        
+        */
+        CelestialBody Mercury = new CelestialBody("Mercury", Sun, Color.GRAY);
+        CelestialBody Venus = new CelestialBody("Venus", Sun, Color.GREEN);
+        CelestialBody Earth = new CelestialBody("Earth", Sun, Color.BLUE);
+        CelestialBody Mars = new CelestialBody("Mars", Sun, Color.RED);
+        CelestialBody Jupiter = new CelestialBody("Jupiter", Sun, Color.BEIGE);
+        CelestialBody Saturn = new CelestialBody("Saturn", Sun, Color.CHOCOLATE);
+        CelestialBody Uranus = new CelestialBody("Uranus", Sun, Color.AQUAMARINE);
+        CelestialBody Neptune = new CelestialBody("Neptune", Sun, Color.AQUA);
         //CelestialBody Moon = new CelestialBody("Moon", 10.79, Earth, 0.002569, 0.002569, 0.0, Color.GRAY);
         
         // Init their controllers
@@ -76,9 +94,8 @@ public class PlanetService{
         initNewCelestialBody(Neptune);
         //initNewCelestialBody(Moon);
         
-        
         // Use api to get other planet moons
-        AstroApiAdapter AstroApi = new AstroApiAdapter();
+        /*
         ArrayList<CelestialBody> Moons = new ArrayList<>();
         celestialBodyControllers.forEach((name,controller) -> {
             if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
@@ -94,7 +111,7 @@ public class PlanetService{
         //Create moon controllers
         for (CelestialBody moon : Moons)
             initNewCelestialBody(moon);
-        
+        */
         // Set initial focus
         renderService.setFocus(getPlanetController("Sun"));
     }
@@ -166,6 +183,10 @@ public class PlanetService{
         //closest.boldOrbit(true);
         SelectedEvent.fireSelected(closest);
         renderService.setFocus(closest);
+    }
+    
+    public static double kmToAU(double _km) {
+        return _km / 149598073;
     }
     
     //=================================== GETTERS ===================================//

@@ -12,7 +12,7 @@ public class Moon extends CelestialBody {
     public Moon (String _apiName, CelestialBody _orbitingBody) {
         super(
                 new AstroApiAdapter().getBodyInfo(_apiName, "englishName"),
-                Double.parseDouble(new AstroApiAdapter().getBodyInfo(_apiName, "meanRadius")),
+                Double.parseDouble(new AstroApiAdapter().getBodyInfo(_apiName, "meanRadius"))/10,
                 Color.GRAY
         );
         this.apiName = _apiName;

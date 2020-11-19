@@ -13,6 +13,7 @@ import api.AstroApiAdapter;
 import services.RenderService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import services.PlanetService;
 
 public class CelestialBody {
     
@@ -22,7 +23,8 @@ public class CelestialBody {
     private double angle = 0;
     
     // Properties
-    private final double A, B, C;
+    private final double semiMajorAxis, semiMinorAxis, eccentricity;
+    public final String apiName;
     public final String name;
     public final double size;
     public final Color color;
@@ -37,26 +39,30 @@ public class CelestialBody {
     /*
     Constructor for CelestialBody object.
     */
-    public CelestialBody (String _name, double _size, CelestialBody _orbitingBody, double _A, double _B, double _C, Color _color) {
-        this.name = _name;
-        this.size = _size;
+    public CelestialBody (String _apiName, CelestialBody _orbitingBody, Color _color) {
+        this.name = AstroApi.getBodyInfo(_apiName, "englishName");
+        this.apiName = _apiName;
+        this.size = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "meanRadius"))/200;
+        this.semiMajorAxis = PlanetService.kmToAU(Double.parseDouble(AstroApi.getBodyInfo(_apiName, "semimajorAxis")));
+        this.eccentricity = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "eccentricity"));
+        this.semiMinorAxis = Math.sqrt(Math.pow(this.semiMajorAxis,2)*(1-Math.pow(this.eccentricity, 2)));
+        
         this.color = _color;
         this.orbitingBody = _orbitingBody;
-        this.A = _A;
-        this.B = _B;
-        this.C = _C;
+        
     }
     /*
     Constructor for CelestialBody object without any orbital data.
     */
-    public CelestialBody (String _name, double _size, Color _color) {
-        this.name = _name;
-        this.size = _size;
+    public CelestialBody (String _apiName, double _size, Color _color) {
+        this.name = AstroApi.getBodyInfo(_apiName, "englishName");
+        this.apiName = _apiName;
+        this.size = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "meanRadius"))/2000;
         this.color = _color;
         this.orbitingBody = null;
-        this.A = 0;
-        this.B = 0;
-        this.C = 0;
+        this.semiMajorAxis = 0;
+        this.semiMinorAxis = 0;
+        this.eccentricity = 0;
     }
     
     /*
@@ -66,11 +72,11 @@ public class CelestialBody {
     public void move(double _angle){
         double zoom = RenderService.getInstance().getZoom();
         if (orbitingBody != null){
-            this.x = this.orbitingBody.getX() + zoom * this.B * Math.sin(_angle) + this.C * zoom;
-            this.y = this.orbitingBody.getY() - zoom * this.A * Math.cos(_angle);
+            this.x = this.orbitingBody.getX() + zoom * this.semiMinorAxis * Math.sin(_angle) + this.eccentricity * zoom;
+            this.y = this.orbitingBody.getY() - zoom * this.semiMajorAxis * Math.cos(_angle);
         } else {
-            this.x = zoom * this.B * Math.sin(_angle) + this.C * zoom;
-            this.y = zoom * this.A * Math.cos(_angle);
+            this.x = zoom * this.semiMinorAxis * Math.sin(_angle) + this.eccentricity * zoom;
+            this.y = zoom * this.semiMajorAxis * Math.cos(_angle);
         }
         
         
@@ -91,11 +97,11 @@ public class CelestialBody {
             if (this.displayOrbit) {
                 // draw orbit
                 _gc.setStroke(Color.GRAY);
-                double x  = this.orbitingBody.getX() + this.C * zoom - (this.A * zoom);
-                double y = this.orbitingBody.getY() - (this.B * zoom);
+                double x  = this.orbitingBody.getX() + this.eccentricity * zoom - (this.semiMajorAxis * zoom);
+                double y = this.orbitingBody.getY() - (this.semiMinorAxis * zoom);
                 if (this.boldOrbit)
                     _gc.setLineWidth(2.0);
-                _gc.strokeOval(x, y, this.A * zoom * 2, this.B * zoom * 2);
+                _gc.strokeOval(x, y, this.semiMajorAxis * zoom * 2, this.semiMinorAxis * zoom * 2);
                 _gc.setLineWidth(1.0);
             }
         }
@@ -116,10 +122,10 @@ public class CelestialBody {
         if (orbitingBody == null)
             return Integer.MAX_VALUE;
         double zoom = RenderService.getInstance().getZoom();
-        double x  = this.orbitingBody.getX() + this.C * zoom;
+        double x  = this.orbitingBody.getX() + this.eccentricity * zoom;
         double y = this.orbitingBody.getY();
-        double rx = this.A * zoom;
-        double ry = this.B * zoom;
+        double rx = this.semiMajorAxis * zoom;
+        double ry = this.semiMinorAxis * zoom;
         
         double d1 = Math.sqrt(Math.pow(_px - x, 2) + Math.pow(_py - y, 2));
         double angle = Math.atan((_py - y) / (_px - x));
@@ -138,7 +144,7 @@ public class CelestialBody {
     
     //=================================== GETTERS ===================================//
     public String getInfo(String _infoType) {
-        return this.AstroApi.getBodyInfo(this.name, _infoType);
+        return this.AstroApi.getBodyInfo(this.apiName, _infoType);
     }
     
     public double getX() { return this.x; }
