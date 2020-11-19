@@ -141,10 +141,10 @@ public class RenderService {
      */
     private void run(GraphicsContext _gc) {
         // Do update logic
-        ZOOM += (goalZOOM - ZOOM) / 5;
-        if (currentPlanetFocus != null) {
-            offsetX += (currentPlanetFocus.getX() - offsetX) / 5;
-            offsetY += (currentPlanetFocus.getY() - offsetY) / 5;
+        this.ZOOM += (this.goalZOOM - this.ZOOM) / 5;
+        if (this.currentPlanetFocus != null) {
+            this.offsetX += (this.currentPlanetFocus.getX() - this.offsetX) / 5;
+            this.offsetY += (this.currentPlanetFocus.getY() - this.offsetY) / 5;
         }
 
         // set background color
@@ -152,7 +152,7 @@ public class RenderService {
         _gc.fillRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
         // Clear the canvas
-        gc.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+        _gc.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
         double dx = getOffsetX();
         double dy = getOffsetY();
@@ -208,10 +208,6 @@ public class RenderService {
     }
 
     //=================================== SETTERS ===================================//
-    public void setFocus(CelestialBodyController _currentPlanetFocus) {
-        this.currentPlanetFocus = _currentPlanetFocus;
-    }
-
     public void setFocus(String _currentPlanetFocus) {
         this.currentPlanetFocus = PlanetService.getPlanetController(_currentPlanetFocus);
     }
