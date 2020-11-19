@@ -33,6 +33,7 @@ public class PlanetService{
     // Properties
     private static Hashtable<String, CelestialBodyController> celestialBodyControllers = new Hashtable<String, CelestialBodyController>();
     private static CelestialBodyController closest;
+    private static CelestialBodyController lastSelected;
     private static double dist;
     
     
@@ -113,7 +114,7 @@ public class PlanetService{
             initNewCelestialBody(moon);
         */
         // Set initial focus
-        renderService.setFocus(getPlanetController("Sun"));
+        renderService.setFocus("Sun");
     }
     
     /*
@@ -133,10 +134,11 @@ public class PlanetService{
             double ox = renderService.getOffsetX();
             double oy = renderService.getOffsetY();
             
-            renderService.getFocus().boldOrbit(true);
+            if (lastSelected != null)
+                lastSelected.boldOrbit(true);
 
             celestialBodyControllers.forEach((name,controller) -> {
-                if (controller != renderService.getFocus())
+                if (controller != lastSelected)
                     controller.boldOrbit(false);
                 double cd = Math.min(controller.getDistToOrbit(ix + ox, iy + oy), controller.getDistToPlanet(ix + ox, iy + oy));
                 if(cd < dist) {
@@ -171,18 +173,18 @@ public class PlanetService{
     }
     
     public static void focusNearestPlanet(){
-        CelestialBodyController lastSelected = renderService.getFocus();
         if (closest == lastSelected)
             return;
-        SelectedEvent.fireUnSelected(lastSelected);
+        if (lastSelected != null)
+            SelectedEvent.fireUnSelected(lastSelected);
+            lastSelected = null;
         if (closest == null) {
-            SelectedEvent.fireSelected(getPlanetController("Sun"));
-            renderService.setFocus(getPlanetController("Sun"));
+            renderService.setFocus("Sun");
             return;
         }
-        //closest.boldOrbit(true);
         SelectedEvent.fireSelected(closest);
-        renderService.setFocus(closest);
+        renderService.setFocus(closest.getName());
+        lastSelected = closest;
     }
     
     public static double kmToAU(double _km) {
