@@ -1,4 +1,4 @@
-package astroapi;
+package api;
 
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -113,6 +113,6 @@ public class AstroApiTranslator implements AstroApiInterface{
                     return "soleil";
             }
         }
-        return "";
+        return _param;
     }
 }

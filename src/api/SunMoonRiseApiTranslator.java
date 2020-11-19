@@ -1,4 +1,4 @@
-package astroapi;
+package api;
 
 import io.ipgeolocation.api.Geolocation;
 import io.ipgeolocation.api.GeolocationParams;
