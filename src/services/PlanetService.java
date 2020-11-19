@@ -173,11 +173,10 @@ public class PlanetService{
     }
     
     public static void focusNearestPlanet(){
+        System.out.println("focus nearest planet");
         if (closest == lastSelected)
             return;
-        if (lastSelected != null)
-            SelectedEvent.fireUnSelected(lastSelected);
-            lastSelected = null;
+        unFocus();
         if (closest == null) {
             renderService.setFocus("Sun");
             return;
@@ -185,6 +184,14 @@ public class PlanetService{
         SelectedEvent.fireSelected(closest);
         renderService.setFocus(closest.getName());
         lastSelected = closest;
+    }
+    
+    public static void unFocus() {
+        if (lastSelected != null) {
+            SelectedEvent.fireUnSelected(lastSelected);
+            lastSelected.boldOrbit(false);
+            lastSelected = null;
+        }
     }
     
     public static double kmToAU(double _km) {
