@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.image.ImageView;
 import services.RenderService;
+import services.PlanetService;
 
 /**
  *
@@ -74,9 +75,9 @@ public class GuiController {
         }
     }
 
-    public void recenter(String name) {
+    public void recenter() {
 
-        RenderService.getInstance().setFocus("Sun");
+        PlanetService.unFocus();
     }
 
     public void zoomPlanet(String name) {
