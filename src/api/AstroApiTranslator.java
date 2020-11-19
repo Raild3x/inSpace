@@ -10,7 +10,7 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AstroApiTranslator implements AstroApiInterface{
+public class AstroApiTranslator implements AstroApiInterface {
 
     private static final String ASTRONOMY_URL = "https://api.le-systeme-solaire.net/rest/bodies";
     private static JSONObject OBJ;
@@ -38,7 +38,7 @@ public class AstroApiTranslator implements AstroApiInterface{
     //Same as above method except it gives all info on one celestial body instead
     //of one specific piece of info.
     public String getBodyInfo(String _body) {
-        String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}?exclude=discoveredBy,discoveryDate,"
+        String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}?exclude="
                 + "alternativeName,id,name,dimension";
         getConnection(url);
         return OBJ.toString();
