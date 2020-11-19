@@ -9,18 +9,20 @@ package services;
  *
  * @author Logan
  */
-import api.AstroApi;
+import api.*;
 import javafx.scene.paint.Color;
 import models.CelestialBody;
 import controllers.CelestialBodyController;
 import controllers.Signal;
 import events.HoverEvent;
 import events.SelectedEvent;
+import java.util.ArrayList;
 import models.InputModel;
 import views.MouseView;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.Moon;
 import org.json.JSONException;
 
 
@@ -49,18 +51,18 @@ public class PlanetService{
     */
     private static void initPlanets(){
         // Create celestial bodies
-        CelestialBody Sun = new CelestialBody("Sun", Color.YELLOW, 526.90);//4326.90
+        CelestialBody Sun = new CelestialBody("Sun", 526.90, Color.YELLOW);//4326.90
         
-        CelestialBody Mercury = new CelestialBody("Mercury", Color.GRAY, 15.16, Sun, 0.3870, 0.3788, 0.0796);
-        CelestialBody Venus = new CelestialBody("Venus", Color.GREEN, 37.60, Sun, 0.7219, 0.7219, 0.0049);
-        CelestialBody Earth = new CelestialBody("Earth", Color.BLUE, 39.59, Sun, 1.0027, 1.0025, 0.0167);
-        CelestialBody Mars = new CelestialBody("Mars", Color.RED, 21.06, Sun, 1.5241, 1.5173, 0.1424);
-        CelestialBody Jupiter = new CelestialBody("Jupiter", Color.BEIGE, 434.41, Sun, 5.2073, 5.2010, 0.2520);
-        CelestialBody Saturn = new CelestialBody("Saturn", Color.CHOCOLATE, 361.84, Sun, 9.5590, 9.5231, 0.5181);
-        CelestialBody Uranus = new CelestialBody("Uranus", Color.AQUAMARINE, 157.59, Sun, 19.1848, 19.1645, 0.9055);
-        CelestialBody Neptune = new CelestialBody("Neptune", Color.AQUA, 152.99, Sun, 30.0806, 30.0788, 0.2687);
+        CelestialBody Mercury = new CelestialBody("Mercury", 15.16, Sun, 0.3870, 0.3788, 0.0796, Color.GRAY);
+        CelestialBody Venus = new CelestialBody("Venus", 37.60, Sun, 0.7219, 0.7219, 0.0049, Color.GREEN);
+        CelestialBody Earth = new CelestialBody("Earth", 39.59, Sun, 1.0027, 1.0025, 0.0167, Color.BLUE);
+        CelestialBody Mars = new CelestialBody("Mars", 21.06, Sun, 1.5241, 1.5173, 0.1424, Color.RED);
+        CelestialBody Jupiter = new CelestialBody("Jupiter", 434.41, Sun, 5.2073, 5.2010, 0.2520, Color.BEIGE);
+        CelestialBody Saturn = new CelestialBody("Saturn", 361.84, Sun, 9.5590, 9.5231, 0.5181, Color.CHOCOLATE);
+        CelestialBody Uranus = new CelestialBody("Uranus", 157.59, Sun, 19.1848, 19.1645, 0.9055, Color.AQUAMARINE);
+        CelestialBody Neptune = new CelestialBody("Neptune", 152.99, Sun, 30.0806, 30.0788, 0.2687, Color.AQUA);
         
-        CelestialBody Moon = new CelestialBody("Moon", Color.GRAY, 10.79, Earth, 0.002569, 0.002569, 0.0);
+        //CelestialBody Moon = new CelestialBody("Moon", 10.79, Earth, 0.002569, 0.002569, 0.0, Color.GRAY);
         
         // Init their controllers
         initNewCelestialBody(Sun);
@@ -72,34 +74,26 @@ public class PlanetService{
         initNewCelestialBody(Saturn);
         initNewCelestialBody(Uranus);
         initNewCelestialBody(Neptune);
-        initNewCelestialBody(Moon);
+        //initNewCelestialBody(Moon);
         
         
         // Use api to get other planet moons
-        /*celestialBodyControllers.forEach((name,controller) -> {
+        AstroApiAdapter AstroApi = new AstroApiAdapter();
+        ArrayList<CelestialBody> Moons = new ArrayList<>();
+        celestialBodyControllers.forEach((name,controller) -> {
             if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
                 System.out.println(name + " isPlanet: " + AstroApi.getBodyInfo(name, "isPlanet"));
-                try {
-                    String info = AstroApi.getBodyInfo(name, "moons");
-                    if (info != "null") {
-                        info = info.substring(1,info.length()); // fix the string to be parsable
-                        System.out.println(info);
-                        Hashtable moons = AstroApi.jsonToHashtable(info);
-                        moons.forEach((data, value) -> {
-                            System.out.println(data + " : " + value);
-                            if (data == "moon") {
-                                System.out.println(value);
-                            }
-                        });
-                    } else {
-                        System.out.println(name+" has no moons.");
-                    }
-
-                } catch (JSONException ex) {
-                    Logger.getLogger(PlanetService.class.getName()).log(Level.SEVERE, null, ex);
+                ArrayList<String> moons = AstroApi.getBodyMoons(name);
+                for (String moonName : moons) {
+                    System.out.println(moonName+": "+AstroApi.getBodyInfo(moonName));
+                    CelestialBody moon = new Moon(moonName, controller.getModel());
+                    Moons.add(moon);
                 }
             }
-        });*/
+        });
+        //Create moon controllers
+        for (CelestialBody moon : Moons)
+            initNewCelestialBody(moon);
         
         // Set initial focus
         renderService.setFocus(getPlanetController("Sun"));

@@ -9,11 +9,14 @@ package models;
  *
  * @author Logan
  */
+import api.AstroApiAdapter;
 import services.RenderService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class CelestialBody {
+    
+    final AstroApiAdapter AstroApi = new AstroApiAdapter();
 
     // Test Vars
     private double angle = 0;
@@ -34,7 +37,7 @@ public class CelestialBody {
     /*
     Constructor for CelestialBody object.
     */
-    public CelestialBody (String _name, Color _color, double _size, CelestialBody _orbitingBody, double _A, double _B, double _C) {
+    public CelestialBody (String _name, double _size, CelestialBody _orbitingBody, double _A, double _B, double _C, Color _color) {
         this.name = _name;
         this.size = _size;
         this.color = _color;
@@ -46,7 +49,7 @@ public class CelestialBody {
     /*
     Constructor for CelestialBody object without any orbital data.
     */
-    public CelestialBody (String _name, Color _color, double _size) {
+    public CelestialBody (String _name, double _size, Color _color) {
         this.name = _name;
         this.size = _size;
         this.color = _color;
@@ -134,6 +137,10 @@ public class CelestialBody {
     }
     
     //=================================== GETTERS ===================================//
+    public String getInfo(String _infoType) {
+        return this.AstroApi.getBodyInfo(this.name, _infoType);
+    }
+    
     public double getX() { return this.x; }
     public double getY() { return this.y; }
     public CelestialBody getOrbitingBody(){ return this.orbitingBody; }
