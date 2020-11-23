@@ -50,7 +50,8 @@ public class CelestialBodyController {
     public String getName(){
         return this.model.name;
     }
-        public String getInfo(String _infoType){
+    
+    public String getInfo(String _infoType){
         return this.model.getInfo(_infoType);
     }
     

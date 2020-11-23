@@ -76,8 +76,8 @@ public class GuiController {
     }
 
     public void recenter() {
-
         PlanetService.unFocus();
+        RenderService.getInstance().setZoom(RenderService.getInstance().getZoom()/4);
     }
 
     public void zoomPlanet(String name) {
