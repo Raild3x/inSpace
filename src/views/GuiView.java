@@ -24,6 +24,11 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import api.*;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 
 /**
  *
@@ -31,8 +36,8 @@ import javafx.scene.text.TextAlignment;
  */
 public class GuiView implements HoverListener, SelectedListener {
 
-    protected final GuiController guiController;
-    protected static GuiView instance;
+    private final GuiController guiController;
+    private static GuiView instance;
 
     // Gui Objects
     private final Label planetNameLabel;
@@ -115,31 +120,34 @@ public class GuiView implements HoverListener, SelectedListener {
         this.planetNameLabel.setStyle("-fx-text-fill : white; -fx-opacity : 0.5;");
 
         //===============================info window components===============================
-        this.title.setAlignment(Pos.TOP_CENTER);
-        this.title.setStyle("-fx-text-fill : black;");
+        this.title.setAlignment(Pos.CENTER);
+        this.title.setStyle("-fx-text-fill : white;");
         this.title.isWrapText();
         this.title.setOpacity(1);
-
         this.title.setFont(Font.font(35));
 
         this.info.setAlignment(Pos.CENTER);
         this.info.setStyle("-fx-text-fill : black;");
-        this.info.setFont(Font.font(20));
+        this.info.setFont(Font.font(14));
+        Color col = Color.SILVER;
+        CornerRadii corner = new CornerRadii(10);
+        Background background = new Background(new BackgroundFill(col, corner, Insets.EMPTY));
+        info.setBackground(background);
 
         this.close.setText("Close");
         this.close.setAlignment(Pos.BOTTOM_CENTER);
         this.close.setStyle("-fx-text-fill : black;");
         this.close.setStyle("-fx-background-color : grey;");
 
-        this.infoPane.setStyle("-fx-background-color : silver;");
+        //this.infoPane.setStyle("-fx-background-color : silver;");
         this.infoPane.setTranslateX(450);
         this.infoPane.setTranslateY(0);
-        this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 4, this.guiController.getCanvas().getHeight() - 100);
-        this.infoPane.setOpacity(0.4);
+        this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 4, this.guiController.getCanvas().getHeight() - 290);
+        this.infoPane.setOpacity(0.5);
         this.infoPane.setAlignment(Pos.CENTER);
         this.infoPane.getChildren().addAll(this.title, this.info, this.close);
         this.infoPane.setSpacing(70.0);
-        
+
     }
 
     //======================================== EVENT RECIEVERS ===========================================//
@@ -151,12 +159,17 @@ public class GuiView implements HoverListener, SelectedListener {
         guiController.zoomPlanet(cbc.getName());
 
         this.title.setText(cbc.getName());
-        this.info.setText("Information on " + cbc.getName());
+
+        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
+                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
+                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
+                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity")  + "\n ");
+
         this.guiController.addGuiObject(this.infoPane);
-        ;
+
         close.setOnAction(e -> {
             this.guiController.removeGuiObject(this.infoPane);
-            guiController.recenter("Sun");
+            //guiController.recenter();
 
         });
     }
@@ -166,7 +179,7 @@ public class GuiView implements HoverListener, SelectedListener {
         System.out.println("Unselected: " + cbc.getName());
 
         this.guiController.removeGuiObject(this.infoPane);
-        guiController.recenter("Sun");
+        //guiController.recenter();
 
     }
 
@@ -182,4 +195,5 @@ public class GuiView implements HoverListener, SelectedListener {
         //System.out.println("Stopped hovering over: " + cbc.getName());
         this.guiController.removeGuiObject(planetNameLabel);
     }
+
 }

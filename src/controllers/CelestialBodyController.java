@@ -50,6 +50,9 @@ public class CelestialBodyController {
     public String getName(){
         return this.model.name;
     }
+        public String getInfo(String _infoType){
+        return this.model.getInfo(_infoType);
+    }
     
     public double getDistToOrbit(double px, double py){
        return this.model.getDistToOrbit(px, py);

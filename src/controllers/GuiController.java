@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.image.ImageView;
 import services.RenderService;
+import services.PlanetService;
 
 /**
  *
@@ -74,9 +75,9 @@ public class GuiController {
         }
     }
 
-    public void recenter(String name) {
+    public void recenter() {
 
-        RenderService.getInstance().setFocus("Sun");
+        PlanetService.unFocus();
     }
 
     public void zoomPlanet(String name) {
@@ -99,7 +100,7 @@ public class GuiController {
 
         switch (request) {
             case "background": //set background
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\background1.png");
+                this.file = new File("images\\background1.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 this.imageView.setFitHeight(this.HEIGHT);
@@ -108,60 +109,60 @@ public class GuiController {
             /*grab planet image by "name" request string, 
           when each planet image is grabbed, we manipulate the image to the size and location of the planet - Taylor*/
             case "Sun":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\sun.png");
+                this.file = new File("images\\sun.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Mercury":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\mercury.png");
+                this.file = new File("images\\mercury.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Venus":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\venus.png");
+                this.file = new File("images\\venus.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Earth":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\earth.png");
+                this.file = new File("images\\earth.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
             case "Moon":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\moon.png");
+                this.file = new File("images\\moon.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Mars":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\mars.png");
+                this.file = new File("images\\mars.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Jupiter":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\jupiter.png");
+                this.file = new File("images\\jupiter.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Saturn":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\saturn.png");
+                this.file = new File("images\\saturn.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Uranus":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\uranus.png");
+                this.file = new File("images\\uranus.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;
 
             case "Neptune":
-                this.file = new File("C:\\Users\\szoor\\OneDrive\\Documents\\School\\CSC 340\\inSpace\\images\\neptune.png");
+                this.file = new File("images\\neptune.png");
                 this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 this.imageView = new ImageView(image);
                 break;

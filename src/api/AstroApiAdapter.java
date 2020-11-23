@@ -36,7 +36,7 @@ public class AstroApiAdapter {
         try {
             jsonMoons = new JSONArray(this.getBodyInfo(_body, "moons"));
         } catch (JSONException ex) {
-            System.out.println("No moons availible!");
+            System.out.println("No moons available!");
             //Logger.getLogger(AstroApiAdapter.class.getName()).log(Level.SEVERE, null, ex);
             return moons;
         }
