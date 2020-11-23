@@ -211,5 +211,9 @@ public class RenderService {
     public void setFocus(String _currentPlanetFocus) {
         this.currentPlanetFocus = PlanetService.getPlanetController(_currentPlanetFocus);
     }
+    
+    public void setZoom(double newZoom) {
+        this.goalZOOM = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+    }
 
 }

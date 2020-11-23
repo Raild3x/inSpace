@@ -22,6 +22,7 @@ import views.MouseView;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import models.Moon;
 import org.json.JSONException;
 
@@ -51,10 +52,12 @@ public class PlanetService{
     Manages the creation of all CelestialBody objects
     */
     private static void initPlanets(){
+        AstroApiAdapter AstroApi = new AstroApiAdapter();
+        
         // Create celestial bodies
         CelestialBody Sun = new CelestialBody("Sun", 526.90, Color.YELLOW);//4326.90
+        initNewCelestialBody(Sun);
         
-        AstroApiAdapter AstroApi = new AstroApiAdapter();
         /*ArrayList<String> planets = AstroApi.getBodyMoons("soleil");
         for (String planetName : planets) {
             System.out.println(planetName+": "+AstroApi.getBodyInfo(planetName));
@@ -73,26 +76,38 @@ public class PlanetService{
         CelestialBody Uranus = new CelestialBody("Uranus", 157.59, Sun, 19.1848, 19.1645, 0.9055, Color.AQUAMARINE);
         CelestialBody Neptune = new CelestialBody("Neptune", 152.99, Sun, 30.0806, 30.0788, 0.2687, Color.AQUA);
         */
-        CelestialBody Mercury = new CelestialBody("Mercury", Sun, Color.GRAY);
-        CelestialBody Venus = new CelestialBody("Venus", Sun, Color.GREEN);
-        CelestialBody Earth = new CelestialBody("Earth", Sun, Color.BLUE);
-        CelestialBody Mars = new CelestialBody("Mars", Sun, Color.RED);
-        CelestialBody Jupiter = new CelestialBody("Jupiter", Sun, Color.BEIGE);
-        CelestialBody Saturn = new CelestialBody("Saturn", Sun, Color.CHOCOLATE);
-        CelestialBody Uranus = new CelestialBody("Uranus", Sun, Color.AQUAMARINE);
-        CelestialBody Neptune = new CelestialBody("Neptune", Sun, Color.AQUA);
-        //CelestialBody Moon = new CelestialBody("Moon", 10.79, Earth, 0.002569, 0.002569, 0.0, Color.GRAY);
+        Task<Void> task = new Task<Void>() {
+            @Override protected Void call() throws Exception {
+                CelestialBody Mercury = new CelestialBody("Mercury", Sun, Color.GRAY);
+                initNewCelestialBody(Mercury);
+                
+                CelestialBody Venus = new CelestialBody("Venus", Sun, Color.GREEN);
+                initNewCelestialBody(Venus);
+                
+                CelestialBody Earth = new CelestialBody("Earth", Sun, Color.BLUE);
+                initNewCelestialBody(Earth);
+                
+                CelestialBody Mars = new CelestialBody("Mars", Sun, Color.RED);
+                initNewCelestialBody(Mars);
+                
+                CelestialBody Jupiter = new CelestialBody("Jupiter", Sun, Color.BEIGE);
+                initNewCelestialBody(Jupiter);
+                
+                CelestialBody Saturn = new CelestialBody("Saturn", Sun, Color.CHOCOLATE);
+                initNewCelestialBody(Saturn);
+                
+                CelestialBody Uranus = new CelestialBody("Uranus", Sun, Color.AQUAMARINE);
+                initNewCelestialBody(Uranus);
+                
+                CelestialBody Neptune = new CelestialBody("Neptune", Sun, Color.AQUA);
+                initNewCelestialBody(Neptune);
+                
+                return null;
+            }
+        };
+        new Thread(task).start();
         
-        // Init their controllers
-        initNewCelestialBody(Sun);
-        initNewCelestialBody(Mercury);
-        initNewCelestialBody(Venus);
-        initNewCelestialBody(Earth);
-        initNewCelestialBody(Mars);
-        initNewCelestialBody(Jupiter);
-        initNewCelestialBody(Saturn);
-        initNewCelestialBody(Uranus);
-        initNewCelestialBody(Neptune);
+        //CelestialBody Moon = new CelestialBody("Moon", 10.79, Earth, 0.002569, 0.002569, 0.0, Color.GRAY);
         //initNewCelestialBody(Moon);
         
         // Use api to get other planet moons
@@ -178,7 +193,6 @@ public class PlanetService{
             return;
         unFocus();
         if (closest == null) {
-            renderService.setFocus("Sun");
             return;
         }
         SelectedEvent.fireSelected(closest);
@@ -188,9 +202,11 @@ public class PlanetService{
     
     public static void unFocus() {
         if (lastSelected != null) {
+            System.out.println("Unfocusing!");
             SelectedEvent.fireUnSelected(lastSelected);
             lastSelected.boldOrbit(false);
             lastSelected = null;
+            renderService.setFocus("Sun");
         }
     }
     
