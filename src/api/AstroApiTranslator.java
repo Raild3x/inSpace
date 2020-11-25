@@ -3,8 +3,8 @@ package astroapi;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.logging.Level;  //Left for debugging
-import java.util.logging.Logger; //Left for debugging
+import java.util.logging.Level;  
+import java.util.logging.Logger; 
 
 public class AstroApiTranslator extends APIConnect implements AstroApiInterface {
 
@@ -118,7 +118,6 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                 startIndex = initString.indexOf(",");
                 endIndex = initString.indexOf("}");
                 moonArrStrVer[i] = initString.replace(initString.substring(startIndex, endIndex), toBeReplaced);
-                //System.out.println(moonArrStrVer[i]); //left for debugging
             }
 
             return moonArrStrVer;
