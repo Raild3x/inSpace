@@ -3,7 +3,6 @@ package api;
 public class AstroTestClass {
 
     public static void main(String[] args) {
-        LocationApiInterface Location = new IPInfoApiTranslator();
 //        AstroApiInterface testing = new AstroApiTranslator();
 //
 //        System.out.println(testing.getBodyInfo("sun", "isplanet"));
@@ -55,12 +54,5 @@ public class AstroTestClass {
 //        System.out.println(testing.getBodyInfo("earth", "aroundPlanet"));
 //        System.out.println(testing.getBodyInfo("earth", "planets its around")); //Invalid param
 //        System.out.println(testing.getBodyInfo("earth", "axialtillt")); //Invalid param
-        System.out.println(Location.getLocationInfo("ip"));
-        System.out.println(Location.getLocationInfo("TIMEZONE"));
-        System.out.println(Location.getLocationInfo("citY"));
-        System.out.println(Location.getLocationInfo("STATEorPROV"));
-        System.out.println(Location.getLocationInfo("latitude"));
-        System.out.println(Location.getLocationInfo("LoNgItUdE"));
-        System.out.println(Location.getLocationInfo("COUNTRYname"));
     }
 }
