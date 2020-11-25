@@ -1,7 +1,7 @@
 package controllers;
 
+import java.awt.Color;
 import java.io.File;
-import views.GuiView;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
@@ -9,7 +9,9 @@ import javafx.scene.image.Image;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
 import services.RenderService;
 import services.PlanetService;
 
@@ -169,5 +171,12 @@ public class GuiController {
         }
 
         return imageView;
+    }
+    public ProgressBar getProgressBar() {
+        ProgressBar progressBar = new ProgressBar();          
+        progressBar.setStyle("-fx-background-color: black;");
+        progressBar.setBorder(Border.EMPTY);
+        progressBar.setMinWidth(80);
+        return progressBar;
     }
 }
