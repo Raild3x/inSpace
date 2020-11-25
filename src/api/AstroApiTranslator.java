@@ -40,7 +40,7 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
     */
     public JSONObject getBodyInfo(String _body) {
         String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}?exclude=discoveredBy,discoveryDate,"
-                + "alternativeName,id,name,dimension";
+                + "alternativeName,name,dimension";
         getConnection(url);
         try {
             if (OBJ.getString("mass").equals("null") && OBJ.getString("vol").equals("null")) {
