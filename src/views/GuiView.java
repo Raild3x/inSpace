@@ -7,24 +7,12 @@ import controllers.GuiController;
 import events.HoverEvent;
 import events.SelectedEvent;
 import javafx.geometry.Pos;
-import services.PlanetService;
 import services.RenderService;
-
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import api.*;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -164,7 +152,6 @@ public class GuiView implements HoverListener, SelectedListener {
 //                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
 //                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
 //                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity")  + "\n ");
-
         this.guiController.addGuiObject(this.infoPane);
 
         close.setOnAction(e -> {
