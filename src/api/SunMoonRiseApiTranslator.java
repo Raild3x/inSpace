@@ -1,7 +1,5 @@
 package astroapi;
 
-import java.util.logging.Level; //Left for debugging
-import java.util.logging.Logger; //Left for debugging
 import org.json.JSONException;
 
 /**
@@ -16,7 +14,7 @@ public class SunMoonRiseApiTranslator extends APIConnect implements SunMoonRiseA
     private final String LON = LOCATIONDATA.getLocationInfo("Longitude");
 /**
  *Returns time expected for sunrise/set and moon rise/set based on the users location.
- *Uses same API as IPGEOLocation. Strings allowed can be found in the Info Accessible through API google doc.
+ *Uses IPGEOLocation API. Strings allowed can be found in the Info Accessible through API google doc.
  */
     public String getSunMoonInfo(String _event){
         String url = ASTRONOMY_URL + API_KEY + "&lat=" + LAT + "&long=" + LON + "&date=2020-11-22";
@@ -32,7 +30,6 @@ public class SunMoonRiseApiTranslator extends APIConnect implements SunMoonRiseA
             return OBJ.getString(param);
             }
         } catch (JSONException ex) {
-            //Logger.getLogger(SunMoonRiseApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
             return "Invalid Params. Check spelling";
         }
         return null;
