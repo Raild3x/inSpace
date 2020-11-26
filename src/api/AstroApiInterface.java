@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author sytiv
+ * @author sytiva
  */
 public interface AstroApiInterface {
 
