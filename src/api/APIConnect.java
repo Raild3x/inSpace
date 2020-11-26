@@ -1,10 +1,8 @@
-package astroapi;
+package Api;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONException;
@@ -13,6 +11,7 @@ import org.json.JSONObject;
 /**
  *
  * @author sytiva
+ *
  * Utilized by the API Translators to retrieve information that comes in the form of a JSON.
  */
 public class APIConnect {
@@ -38,8 +37,7 @@ public class APIConnect {
 
             OBJ = new JSONObject(content.toString());
         } catch (IOException | JSONException ex) {
-            //Logger.getLogger(APIConnect.class.getName()).log(Level.SEVERE, null, ex);  //Left for debugging
-            System.out.println("Error: Exception at getConnection");
+            System.out.println("Exception at getConnection");
             noReturn = true;
         }
     }
