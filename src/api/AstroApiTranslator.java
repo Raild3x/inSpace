@@ -3,8 +3,7 @@ package astroapi;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.logging.Level;  
-import java.util.logging.Logger; 
+import org.apache.commons.lang3.StringUtils;
 
 public class AstroApiTranslator extends APIConnect implements AstroApiInterface {
 
@@ -19,44 +18,32 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         getConnection(url);
         try {
             if ((noReturn == false) && OBJ.getString("mass").compareTo("null") != 0 && OBJ.getString("vol").compareTo("null") != 0) {
-
                 if (_dataWanted.toLowerCase().equals("moons")) {
-                    getMoonsAsArray(OBJ);
+                    getMoonsAsArray(_body);
                 } else {
                     return OBJ.getString(fixParam(_dataWanted));
                 }
             }
         } catch (NullPointerException | JSONException ex) {
-            //Logger.getLogger(AstroApi.class.getName()).log(Level.SEVERE, null, ex);
             System.out.print("Invalid params at getBodyInfo(String,String)");
         }
         noReturn = false;
         return "";
     }
 
-    /*Same as above method except it gives all info on one celestial body instead
-    * of one specific piece of info. Returns entire JSON to allow retrieval of any
-    * info without making multiple calls.
-    */
+    /* Returns entire JSON of information on a celestial body to allow retrieval 
+     * of any info without making multiple calls to the API.
+     */
     public JSONObject getBodyInfo(String _body) {
-        String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}?exclude=discoveredBy,discoveryDate,"
-                + "alternativeName,name,dimension";
+        String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}";
         getConnection(url);
-        try {
-            if (OBJ.getString("mass").equals("null") && OBJ.getString("vol").equals("null")) {
-                throw new NullPointerException();
-            } else {
-                return OBJ;
-            }
-        } catch (JSONException ex) {
-            //Logger.getLogger(AstroApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Exception. Check your params");
-            return OBJ;
-        }
+        return OBJ;
     }
 
-//Fixes any case sensitive parameters used by the getBodyInfo methods by forcing
-//them to be the correct format.
+    /* 
+    *  Fixes any case sensitive parameters used by the getBodyInfo methods by forcing
+    *  them to be the correct format.
+    */
     private static String fixParam(String _param) {
         String toLowerCase = _param.toLowerCase();
         if ("id".equals(toLowerCase) || "name".equals(toLowerCase) || "moons".equals(toLowerCase)
@@ -97,16 +84,19 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                     return "soleil";
             }
         }
-        return _param;
+
+        String replace = _param.replace("/","");
+        String replaceAll = replace.replaceAll(" ", "");
+        return StringUtils.stripAccents(replaceAll);
     }
 
     //Returns a String array of the moons of a celestial body. Excludes the api rel link.
-    public String[] getMoonsAsArray(JSONObject _jsonObj) {
+    public String[] getMoonsAsArray(String _body) {
         JSONArray moonArray;
         String[] moonArrStrVer = null;
 
         try {
-            moonArray = _jsonObj.getJSONArray("moons");
+            moonArray = getBodyInfo(_body).getJSONArray("moons");
             moonArrStrVer = new String[moonArray.length()];
             String initString;
             int startIndex;
@@ -123,7 +113,6 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
             return moonArrStrVer;
 
         } catch (JSONException ex) {
-            //Logger.getLogger(AstroApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("A JSONException occurred. Planet may have no moons");
             return moonArrStrVer;
         }
