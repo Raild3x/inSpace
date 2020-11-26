@@ -1,6 +1,5 @@
 package api;
 
-
 import org.json.JSONException;
 
 /**
@@ -18,7 +17,6 @@ public class IPInfoApiTranslator extends APIConnect implements LocationApiInterf
         try {
             return OBJ.getString(fixParams(_placeInfo));
         } catch (JSONException ex) {
-            //Logger.getLogger(IPInfoApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
             return "JSONException: Info not found";
         }
     }
