@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author sytiva
+ * @author sytiv
  */
 public interface AstroApiInterface {
 
@@ -12,5 +12,5 @@ public interface AstroApiInterface {
 
     public JSONObject getBodyInfo(String _body);
 
-    public String[] getMoonsAsArray(JSONObject _jsonObj);
+    public String[] getMoonsAsArray(String _body);
 }
