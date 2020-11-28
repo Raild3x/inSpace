@@ -6,6 +6,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ *
+ * @author sytiva
+ */
 public class AstroApiTranslator extends APIConnect implements AstroApiInterface {
 
     private static final String ASTRONOMY_URL = "https://api.le-systeme-solaire.net/rest/bodies";
