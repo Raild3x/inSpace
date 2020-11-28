@@ -1,12 +1,16 @@
 package api;
 
+import org.json.JSONObject;
+
 /**
  *
- * @author sytiv
+ * @author sytiva
  */
 public interface AstroApiInterface {
 
     public String getBodyInfo(String _body, String _dataWanted);
 
-    public String getBodyInfo(String _body);
+    public JSONObject getBodyInfo(String _body);
+
+    public String[] getMoonsAsArray(String _body);
 }

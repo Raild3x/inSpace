@@ -2,11 +2,11 @@ package api;
 
 /**
  *
- * @author sytiv
+ * @author sytiva
  */
 public class SunMoonRiseAdapter {
 
-    SunMoonRiseApiInterface SunMoonRiseAdapter = new SunMoonRiseApiTranslator();
+    final SunMoonRiseApiInterface SunMoonRiseAdapter = new SunMoonRiseApiTranslator();
 
     public String getSunMoonInfo(String _event) {
         return SunMoonRiseAdapter.getSunMoonInfo(_event);
