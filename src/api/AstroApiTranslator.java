@@ -1,5 +1,6 @@
 package api;
 
+import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,9 +18,9 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         String url = ASTRONOMY_URL + "/{" + _body + "}";
         getConnection(url);
         try {
-            if ((noReturn == false) && OBJ.getString("mass").compareTo("null") != 0 && OBJ.getString("vol").compareTo("null") != 0) {
+            if (noReturn == false) {
                 if (_dataWanted.toLowerCase().equals("moons")) {
-                    getMoonsAsArray(_body);
+                    return Arrays.toString(getMoonsAsArray(_body));
                 } else {
                     return OBJ.getString(fixParam(_dataWanted));
                 }
@@ -31,19 +32,22 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         return "";
     }
 
-    /* Returns entire JSON of information on a celestial body to allow retrieval 
+    /* Returns entire JSON of information on a celestial body to allow retrieval
      * of any info without making multiple calls to the API.
      */
     public JSONObject getBodyInfo(String _body) {
         String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}";
+        JSONObject err = null;
         getConnection(url);
-        return OBJ;
+        if (noReturn == false) {
+            return OBJ;
+        }
+        noReturn = false;
+        return err;
     }
 
-    /* 
-    *  Fixes any case sensitive parameters used by the getBodyInfo methods by forcing
-    *  them to be the correct format.
-    */
+//Fixes any case sensitive parameters used by the getBodyInfo methods by forcing
+//them to be the correct format. Also removes unneccessary spaces,slashes or accented letters.
     private static String fixParam(String _param) {
         String toLowerCase = _param.toLowerCase();
         if ("id".equals(toLowerCase) || "name".equals(toLowerCase) || "moons".equals(toLowerCase)
@@ -85,15 +89,17 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
             }
         }
 
-        String replace = _param.replace("/","");
-        String replaceAll = replace.replaceAll(" ", "");
-        return StringUtils.stripAccents(replaceAll);
+        String replaceSlashes = _param.replace("/", "");
+        String replaceSpace = replaceSlashes.replaceAll(" ", "");
+        String replaceWeirdLetters = replaceSpace.replaceAll("œ", "oe");
+        return StringUtils.stripAccents(replaceWeirdLetters);
     }
 
-    //Returns a String array of the moons of a celestial body. Excludes the api rel link.
+    // Returns a String array of the moons of a celestial body. If an array is needed, call
+    // this instead of getBodyInfo(_body, "moons").Excludes the api rel link.
     public String[] getMoonsAsArray(String _body) {
         JSONArray moonArray;
-        String[] moonArrStrVer = null;
+        String[] moonArrStrVer = {};
 
         try {
             moonArray = getBodyInfo(_body).getJSONArray("moons");
@@ -108,12 +114,13 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                 startIndex = initString.indexOf(",");
                 endIndex = initString.indexOf("}");
                 moonArrStrVer[i] = initString.replace(initString.substring(startIndex, endIndex), toBeReplaced);
+                //System.out.println(moonArrStrVer[i]);
             }
 
             return moonArrStrVer;
 
         } catch (JSONException ex) {
-            System.out.println("A JSONException occurred. Planet may have no moons");
+            System.out.println("A JSONException at getMoonsAsArray. Body may have no moons");
             return moonArrStrVer;
         }
     }
