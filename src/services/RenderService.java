@@ -150,7 +150,7 @@ public class RenderService {
     Runs every frame and executes planet movement updates and rendering.
     @param _gc GraphicsContext being used to render on.
      */
-    private void run(GraphicsContext _gc) {
+    private synchronized void run(GraphicsContext _gc) {
         // Do update logic
         this.ZOOM += (this.goalZOOM - this.ZOOM) / 5;
         if (this.currentPlanetFocus != null) {
@@ -169,23 +169,31 @@ public class RenderService {
         double dy = getOffsetY();
         // Update Object Movements //
         long currentTick = System.currentTimeMillis();
-        for (CelestialBodyController body : gameObjects) {
-            try {
-                body.moveCelestialBody(currentTick - lastTick);
-            } catch (NullPointerException e) {
-                //System.out.println(e);
+        try {
+            for (CelestialBodyController body : gameObjects) {
+                try {
+                    body.moveCelestialBody(currentTick - lastTick);
+                } catch (NullPointerException e) {
+                    //System.out.println(e);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Failed to access arraylist");
         }
         
         // Draw Objects //
         // offset camera
         _gc.translate(-dx, -dy);
-        for (CelestialBodyController body : gameObjects) {
-            try {
-                body.renderCelestialBody(_gc);
-            } catch (NullPointerException e) {
-                //System.out.println(e);
+        try {
+            for (CelestialBodyController body : gameObjects) {
+                try {
+                    body.renderCelestialBody(_gc);
+                } catch (NullPointerException e) {
+                    //System.out.println(e);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Failed to access arraylist");
         }
         
         //reset camera
