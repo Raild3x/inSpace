@@ -35,6 +35,15 @@ public class GuiView implements HoverListener, SelectedListener {
     private final Label info;
     private final Button close;
 
+    //info strings
+    String mass;
+    String inclination;
+    String radius;
+    String density;
+    String gravity;
+    String axialTilt;
+    String eccentricity;
+
     /*
      * Private constructor for GuiView object.
      */
@@ -148,10 +157,28 @@ public class GuiView implements HoverListener, SelectedListener {
 
         this.title.setText(cbc.getName());
 
-        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
-                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
-                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
-                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity")  + "\n ");
+        Thread thread = new Thread() {
+            public void run() {
+                mass = cbc.getInfo("mass");
+                inclination = cbc.getInfo("inclination");
+                radius = cbc.getInfo("meanRadius");
+                density = cbc.getInfo("density");
+                gravity = cbc.getInfo("gravity");
+                axialTilt = cbc.getInfo("axialTilt");
+                eccentricity = cbc.getInfo("eccentricity");
+            }
+        };
+        thread.start();
+
+        this.info.setText("\n  Mass: " + mass + "  \n\n  Inclination: "
+                + inclination + "\n\n  Radius: " + radius
+                + "\n\n  Density: " + density + "\n\n  Gravity: " + gravity
+                + "\n\n  Axial Tilt: " + axialTilt + "\n\n  Eccentricity: " + eccentricity + "\n ");
+
+//        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
+//                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
+//                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
+//                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity") + "\n ");
         this.guiController.addGuiObject(this.infoPane);
 
         close.setOnAction(e -> {
