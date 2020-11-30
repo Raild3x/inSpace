@@ -179,4 +179,5 @@ public class GuiController {
         progressBar.setMinWidth(80);
         return progressBar;
     }
-}
+
+            }
