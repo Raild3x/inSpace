@@ -27,10 +27,7 @@ public class GuiController {
 
     private final Canvas canvas;
     private final StackPane stackPane;
-
-    private File file;
-    private Image image;
-    private ImageView imageView;
+    private final ProgressBar progressBar;
 
     protected static GuiController instance;
 
@@ -40,11 +37,8 @@ public class GuiController {
     private GuiController() {
         this.canvas = new Canvas();
         this.stackPane = new StackPane();
-        try {
-            this.stackPane.getChildren().add(getImageView("background")); // background layer, I'm doing this here because it needs to be added first, o it will overlay everything else - Taylor
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.progressBar = new ProgressBar();
+        this.init();
     }
 
     /*
@@ -55,6 +49,19 @@ public class GuiController {
             instance = new GuiController();
         }
         return instance;
+    }
+    
+    // Initializes aspects about the guiController
+    private void init() {
+        try {
+            this.stackPane.getChildren().add(getImageView("background")); // background layer, I'm doing this here because it needs to be added first, o it will overlay everything else - Taylor
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.progressBar.setStyle("-fx-background-color: black;");
+        this.progressBar.setBorder(Border.EMPTY);
+        this.progressBar.setMinWidth(80);
     }
 
     /*
@@ -79,7 +86,7 @@ public class GuiController {
 
     public void recenter() {
         PlanetService.unFocus();
-        RenderService.getInstance().setZoom(RenderService.getInstance().getZoom()/4);
+        RenderService.getInstance().setZoom(Math.min(RenderService.getInstance().getZoom()/4, 250));
     }
 
     public void zoomPlanet(String name) {
@@ -99,85 +106,91 @@ public class GuiController {
 
     // method to request an image, pass a string with the "request" name - Taylor
     public ImageView getImageView(String request) throws URISyntaxException {
-
+        ImageView imageView;
+        File file;
+        Image image;
+        
         switch (request) {
             case "background": //set background
-                this.file = new File("images\\background1.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
-                this.imageView.setFitHeight(this.HEIGHT);
-                this.imageView.setFitWidth(this.WIDTH);
+                file = new File("images\\background1.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
+                imageView.setFitHeight(this.HEIGHT);
+                imageView.setFitWidth(this.WIDTH);
                 break;
             /*grab planet image by "name" request string, 
           when each planet image is grabbed, we manipulate the image to the size and location of the planet - Taylor*/
             case "Sun":
-                this.file = new File("images\\sun.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\sun.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Mercury":
-                this.file = new File("images\\mercury.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\mercury.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Venus":
-                this.file = new File("images\\venus.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\venus.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Earth":
-                this.file = new File("images\\earth.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\earth.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
             case "Moon":
-                this.file = new File("images\\moon.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\moon.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Mars":
-                this.file = new File("images\\mars.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\mars.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Jupiter":
-                this.file = new File("images\\jupiter.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\jupiter.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Saturn":
-                this.file = new File("images\\saturn.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\saturn.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Uranus":
-                this.file = new File("images\\uranus.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\uranus.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
 
             case "Neptune":
-                this.file = new File("images\\neptune.png");
-                this.image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
-                this.imageView = new ImageView(image);
+                file = new File("images\\neptune.png");
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
                 break;
+                
+            default:
+                file = new File("images\\moon.png"); // CHANGE THIS TO SOME RANDOM MOON THING
+                image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
+                imageView = new ImageView(image);
         }
 
         return imageView;
     }
+    
+    
     public ProgressBar getProgressBar() {
-        ProgressBar progressBar = new ProgressBar();          
-        progressBar.setStyle("-fx-background-color: black;");
-        progressBar.setBorder(Border.EMPTY);
-        progressBar.setMinWidth(80);
-        return progressBar;
+        return this.progressBar;
     }
 
             }

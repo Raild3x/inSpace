@@ -58,6 +58,7 @@ public class RenderService {
     public static final Signal<Long> PostRenderstep = new Signal<>();
 
     // Variables (Volatile)
+    private long startTime = System.currentTimeMillis();
     private double ZOOM = 5;
     private double goalZOOM = ZOOM;
     private double offsetX = 0;
@@ -102,19 +103,29 @@ public class RenderService {
     }
 
     /*
-    Initializes the Renderer, sets up the screen and begins the render cycle by calling run every set milliseconds.
-    @param _stage The window on which to build the canvas and scene
+     * Initializes the Renderer, sets up the screen and begins the render cycle by calling run every set milliseconds.
+     * @param _stage The window on which to build the canvas and scene
      */
     private void init() throws Exception {
+        GuiController gc = GuiController.getInstance();
+        //gc.addGuiObject(gc.getProgressBar());
+        this.scene.setFill(Color.BLACK);
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        
+        this.startRendering();
+    }
+    
+    public void startRendering() {
+        System.out.println("Beginning Render.");
         try {
-            this.stage.setTitle("Orbit Test");
-
-            Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000 / FPS), e -> run(gc)));
+            GuiController gc = GuiController.getInstance();
+        
+            Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000 / FPS), e -> run(this.gc)));
             tl.setCycleCount(Timeline.INDEFINITE);
-
-            GuiController.getInstance().addGuiObject(this.canvas);
-            this.scene.setFill(Color.BLACK);
-            this.stage.setScene(this.scene);
+            
+            gc.addGuiObject(canvas);
+            this.stage.setScene(scene);
             this.stage.show();
             //begin rendering
             tl.play();
@@ -139,7 +150,7 @@ public class RenderService {
     Runs every frame and executes planet movement updates and rendering.
     @param _gc GraphicsContext being used to render on.
      */
-    private void run(GraphicsContext _gc) {
+    private synchronized void run(GraphicsContext _gc) {
         // Do update logic
         this.ZOOM += (this.goalZOOM - this.ZOOM) / 5;
         if (this.currentPlanetFocus != null) {
@@ -158,15 +169,33 @@ public class RenderService {
         double dy = getOffsetY();
         // Update Object Movements //
         long currentTick = System.currentTimeMillis();
-        for (CelestialBodyController body : gameObjects) {
-            body.moveCelestialBody(currentTick - lastTick);
+        try {
+            for (CelestialBodyController body : gameObjects) {
+                try {
+                    body.moveCelestialBody(currentTick - lastTick);
+                } catch (NullPointerException e) {
+                    //System.out.println(e);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to access arraylist");
         }
+        
         // Draw Objects //
         // offset camera
         _gc.translate(-dx, -dy);
-        for (CelestialBodyController body : gameObjects) {
-            body.renderCelestialBody(_gc);
+        try {
+            for (CelestialBodyController body : gameObjects) {
+                try {
+                    body.renderCelestialBody(_gc);
+                } catch (NullPointerException e) {
+                    //System.out.println(e);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to access arraylist");
         }
+        
         //reset camera
         _gc.translate(dx, dy);
 
@@ -181,13 +210,13 @@ public class RenderService {
     public void addInstance(CelestialBodyController _obj) {
         gameObjects.add(_obj);
     }
-
-    // Graphic Utility Methods
+    
     /*
-    --UNDER CONSTRUCTION--
+    Removes the Controller of a given CelestialBody from the gameObjects arraylist.
+    @param _obj The CelestialBodyController that is going to be removed.
      */
-    public static void fadeIn(double t) {
-
+    public void removeInstance(CelestialBodyController _obj) {
+        gameObjects.remove(_obj);
     }
 
     //=================================== GETTERS ===================================//
@@ -205,6 +234,10 @@ public class RenderService {
 
     public double getOffsetY() {
         return this.offsetY - this.canvas.getHeight() / 2;
+    }
+    
+    public long getElapsedTime() {
+        return System.currentTimeMillis() - this.startTime;
     }
 
     //=================================== SETTERS ===================================//
