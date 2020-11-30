@@ -6,6 +6,9 @@ import controllers.CelestialBodyController;
 import controllers.GuiController;
 import events.HoverEvent;
 import events.SelectedEvent;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import services.RenderService;
 import javafx.scene.control.Button;
@@ -34,6 +37,8 @@ public class GuiView implements HoverListener, SelectedListener {
     private final Label title;
     private final Label info;
     private final Button close;
+    private Label loading;
+    private boolean ready;
 
     //info strings
     String mass;
@@ -56,6 +61,8 @@ public class GuiView implements HoverListener, SelectedListener {
         this.info = new Label();
         this.close = new Button();
         this.infoPane = new VBox();
+        this.loading = new Label(" ");
+        this.ready = false;
 
         this.init();
     }
@@ -101,6 +108,12 @@ public class GuiView implements HoverListener, SelectedListener {
         appName.setTranslateY(-395);
         appName.setFont(Font.font(30));
         this.guiController.addGuiObject(appName);
+
+        this.loading.setText("Loading...");
+        this.loading.setAlignment(Pos.CENTER);
+        this.loading.setFont(Font.font(30));
+        this.loading.setStyle("-fx-text-fill : white; -fx-opacity : 0.8;");
+        this.guiController.addGuiObject(this.loading);
 
         this.zoomLabel.setStyle("-fx-text-fill : white; -fx-opacity : 0.3;");
         this.zoomLabel.setTranslateX(600);
@@ -157,8 +170,17 @@ public class GuiView implements HoverListener, SelectedListener {
 
         this.title.setText(cbc.getName());
 
-        Thread thread = new Thread() {
+        Thread loadData = new Thread() {
             public void run() {
+//                while (!ready) {
+//                    try {
+//                        wait();
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//                ready = false;
+
                 mass = cbc.getInfo("mass");
                 inclination = cbc.getInfo("inclination");
                 radius = cbc.getInfo("meanRadius");
@@ -166,21 +188,49 @@ public class GuiView implements HoverListener, SelectedListener {
                 gravity = cbc.getInfo("gravity");
                 axialTilt = cbc.getInfo("axialTilt");
                 eccentricity = cbc.getInfo("eccentricity");
+
+                //notifyAll();
             }
         };
-        thread.start();
+        loadData.start();
 
+//        Thread deleteLoadLabel = new Thread() {
+//
+//            public synchronized void run() {
+//                while (ready) {
+//                    try {
+//                        wait();
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//                ready = true;
+//
+//                loading.setText(" ");
+//
+//                notifyAll();
+//
+//            }
+//        };
+//        deleteLoadLabel.start();
         this.info.setText("\n  Mass: " + mass + "  \n\n  Inclination: "
                 + inclination + "\n\n  Radius: " + radius
                 + "\n\n  Density: " + density + "\n\n  Gravity: " + gravity
                 + "\n\n  Axial Tilt: " + axialTilt + "\n\n  Eccentricity: " + eccentricity + "\n ");
 
+        try {
+            this.guiController.getStackPane().getChildren().remove(loading);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        this.guiController.addGuiObject(this.infoPane);
+
+// moved this to a thread
 //        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
 //                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
 //                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
 //                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity") + "\n ");
-        this.guiController.addGuiObject(this.infoPane);
-
         close.setOnAction(e -> {
             this.guiController.removeGuiObject(this.infoPane);
             guiController.recenter();
