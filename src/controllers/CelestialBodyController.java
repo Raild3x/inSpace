@@ -5,20 +5,29 @@
  */
 package controllers;
 
+import events.SelectedEvent;
+import java.util.ArrayList;
 import models.CelestialBody;
 import services.RenderService;
 import javafx.scene.canvas.GraphicsContext;
+import listeners.SelectedListener;
 
 /**
  *
  * @author Logan
  */
-public class CelestialBodyController {
+public class CelestialBodyController implements SelectedListener {
     
     private CelestialBody model;
     
     public CelestialBodyController(CelestialBody _model){
         this.model = _model;
+        SelectedEvent.addListener(this);
+    }
+    
+    @Override
+    public String toString() {
+        return this.getName();
     }
     
     public void moveCelestialBody(double dt){
@@ -63,8 +72,27 @@ public class CelestialBodyController {
         return this.model.getDistToPlanet(px, py);
     }
     
+    public ArrayList<String> getMoons() {
+        return this.model.moons;
+    }
+    
     //=================================== SETTERS ===================================//
     public void boldOrbit(boolean val){
         this.model.boldOrbit = val;
+    }
+
+    //=================================== EVENTS ===================================//
+    @Override
+    public void Selected(CelestialBodyController cbc) {
+        if (cbc != this)
+            return;
+        this.model.loadMoons();
+    }
+
+    @Override
+    public void UnSelected(CelestialBodyController cbc) {
+        if (cbc != this)
+            return;
+        this.model.unloadMoons();
     }
 }

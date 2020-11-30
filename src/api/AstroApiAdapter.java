@@ -37,7 +37,6 @@ public class AstroApiAdapter {
             jsonMoons = new JSONArray(this.getBodyInfo(_body, "moons"));
         } catch (JSONException ex) {
             System.out.println("No moons available!");
-            //Logger.getLogger(AstroApiAdapter.class.getName()).log(Level.SEVERE, null, ex);
             return moons;
         }
         
@@ -46,10 +45,9 @@ public class AstroApiAdapter {
                 JSONObject jsonObj = jsonMoons.getJSONObject(i);
                 String moon = jsonObj.getString("rel");
                 moon = moon.substring(moon.lastIndexOf("/") + 1);
-                //System.out.println(moon);
                 moons.add(moon);
             } catch (JSONException ex) {
-                System.out.println("Unable to getJSONObject from JSONArray");
+                System.out.println("Unable to get JSONObject from JSONArray");
                 Logger.getLogger(AstroApiAdapter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -29,6 +29,9 @@ public class Main extends Application {
         MouseView.init();
         GuiView.getInstance();
         
+        //PlanetService.waitForPlanetsToLoad();
+        //RenderService.getInstance().startRendering();
+        
         //LocationApi.Test();
         //System.out.println(getLocationInfo("latitude"));
         /*System.out.println("AstoApi Testing:");
