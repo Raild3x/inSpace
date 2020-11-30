@@ -148,10 +148,10 @@ public class GuiView implements HoverListener, SelectedListener {
 
         this.title.setText(cbc.getName());
 
-//        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
-//                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
-//                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
-//                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity")  + "\n ");
+        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
+                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
+                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
+                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity")  + "\n ");
         this.guiController.addGuiObject(this.infoPane);
 
         close.setOnAction(e -> {
