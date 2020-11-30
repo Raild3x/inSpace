@@ -17,17 +17,15 @@ public class SunMoonRiseApiTranslator extends APIConnect implements SunMoonRiseA
  *Uses IPGEOLocation API. Strings allowed can be found in the Info Accessible through API google doc.
  */
     public String getSunMoonInfo(String _event){
-        String url = ASTRONOMY_URL + API_KEY + "&lat=" + LAT + "&long=" + LON + "&date=2020-11-22";
+        String url = ASTRONOMY_URL + API_KEY + "&lat=" + LAT + "&long=" + LON;
         String param = _event.toLowerCase();
         getConnection(url);
 
         try {
-            if(param.equals("moonrise")|| param.equals("moonset")){
-                if(OBJ.getString(param).equals("-:-")){
-                    return "No moonset / moonrise for this date.";
-                }
-            }else{
-            return OBJ.getString(param);
+            if (OBJ.getString(param).equals("-:-")) {
+                return "No moonset / moonrise for this date.";
+            } else {
+                return OBJ.getString(param);
             }
         } catch (JSONException ex) {
             return "Invalid Params. Check spelling";
