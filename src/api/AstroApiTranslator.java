@@ -1,20 +1,18 @@
 package api;
 
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.Arrays;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 
-public class AstroApiTranslator implements AstroApiInterface {
+/**
+ *
+ * @author sytiva
+ */
+public class AstroApiTranslator extends APIConnect implements AstroApiInterface {
 
     private static final String ASTRONOMY_URL = "https://api.le-systeme-solaire.net/rest/bodies";
-    private static JSONObject OBJ;
-    private static boolean noReturn = false; //Ensures results of previous calls are not returned twice if current API call fails due to bad params
 
     /*Returns info(_dataWanted) of a specific celestial body(_body). Info on what strings are allowed as _dataWanted
      *here: https://api.le-systeme-solaire.net/en/
@@ -25,54 +23,35 @@ public class AstroApiTranslator implements AstroApiInterface {
         getConnection(url);
         try {
             if (noReturn == false) {
-                return OBJ.getString(fixParam(_dataWanted));
+                if (_dataWanted.toLowerCase().equals("moons")) {
+                    return Arrays.toString(getMoonsAsArray(_body));
+                } else {
+                    return OBJ.getString(fixParam(_dataWanted));
+                }
             }
         } catch (NullPointerException | JSONException ex) {
-            //Logger.getLogger(AstroApi.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.print("Invalid params");
+            System.out.print("Invalid params at getBodyInfo(String,String)");
         }
         noReturn = false;
         return "";
     }
 
-    //Same as above method except it gives all info on one celestial body instead
-    //of one specific piece of info.
-    public String getBodyInfo(String _body) {
-        String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}?exclude="
-                + "alternativeName,id,name,dimension";
+    /* Returns entire JSON of information on a celestial body to allow retrieval
+     * of any info without making multiple calls to the API.
+     */
+    public JSONObject getBodyInfo(String _body) {
+        String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}";
+        JSONObject err = null;
         getConnection(url);
-        return OBJ.toString();
-    }
-
-    //Used to get connect to internet to retrieve a json with the requested info.
-    private static void getConnection(String _urlString) {
-        URL url;
-        try {
-            url = new URL(_urlString);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            //int status = con.getResponseCode();
-            //System.out.println("Response Code: " + status);   //Used these line to check response code while debugging
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            con.disconnect();
-
-            OBJ = new JSONObject(content.toString());
-        } catch (IOException | JSONException ex) {
-            Logger.getLogger(AstroApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.print("Invalid params");
-            noReturn = true;
+        if (noReturn == false) {
+            return OBJ;
         }
+        noReturn = false;
+        return err;
     }
 
 //Fixes any case sensitive parameters used by the getBodyInfo methods by forcing
-//them to be the correct format.
+//them to be the correct format. Also removes unneccessary spaces,slashes or accented letters.
     private static String fixParam(String _param) {
         String toLowerCase = _param.toLowerCase();
         if ("id".equals(toLowerCase) || "name".equals(toLowerCase) || "moons".equals(toLowerCase)
@@ -113,6 +92,40 @@ public class AstroApiTranslator implements AstroApiInterface {
                     return "soleil";
             }
         }
-        return _param;
+
+        String replaceSlashes = _param.replace("/", "");
+        String replaceSpace = replaceSlashes.replaceAll(" ", "");
+        String replaceWeirdLetters = replaceSpace.replaceAll("œ", "oe");
+        return StringUtils.stripAccents(replaceWeirdLetters);
+    }
+
+    // Returns a String array of the moons of a celestial body. If an array is needed, call
+    // this instead of getBodyInfo(_body, "moons").Excludes the api rel link.
+    public String[] getMoonsAsArray(String _body) {
+        JSONArray moonArray;
+        String[] moonArrStrVer = {};
+
+        try {
+            moonArray = getBodyInfo(_body).getJSONArray("moons");
+            moonArrStrVer = new String[moonArray.length()];
+            String initString;
+            int startIndex;
+            int endIndex;
+            String toBeReplaced = "";
+
+            for (int i = 0; i < moonArrStrVer.length; i++) {
+                initString = moonArray.optString(i);
+                startIndex = initString.indexOf(",");
+                endIndex = initString.indexOf("}");
+                moonArrStrVer[i] = initString.replace(initString.substring(startIndex, endIndex), toBeReplaced);
+                //System.out.println(moonArrStrVer[i]);
+            }
+
+            return moonArrStrVer;
+
+        } catch (JSONException ex) {
+            System.out.println("A JSONException at getMoonsAsArray. Body may have no moons");
+            return moonArrStrVer;
+        }
     }
 }

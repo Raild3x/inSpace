@@ -128,6 +128,7 @@ public class PlanetService {
 
         //CelestialBody Moon = new CelestialBody("Moon", 10.79, Earth, 0.002569, 0.002569, 0.0, Color.GRAY);
         //initNewCelestialBody(Moon);
+
         // Set initial focus
         renderService.setFocus("Sun");
     }

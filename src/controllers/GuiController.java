@@ -192,4 +192,5 @@ public class GuiController {
     public ProgressBar getProgressBar() {
         return this.progressBar;
     }
-}
+
+            }

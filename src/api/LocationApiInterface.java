@@ -2,7 +2,7 @@ package api;
 
 /**
  *
- * @author sytiv
+ * @author sytiva
  */
 public interface LocationApiInterface {
 

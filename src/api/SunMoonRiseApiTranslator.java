@@ -1,61 +1,38 @@
 package api;
 
-import io.ipgeolocation.api.Geolocation;
-import io.ipgeolocation.api.GeolocationParams;
-import io.ipgeolocation.api.IPGeolocationAPI;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
- * @author sytiv
+ * @author sytiva
  */
-public class SunMoonRiseApiTranslator implements SunMoonRiseApiInterface{
+public class SunMoonRiseApiTranslator extends APIConnect implements SunMoonRiseApiInterface {
+
     private static final String ASTRONOMY_URL = "https://api.ipgeolocation.io/astronomy?apiKey=";
-    protected static final String API_KEY = "18da31d005e94d3c84fe2cf81d79f114";
-    private static final IPGeolocationAPI API = new IPGeolocationAPI(API_KEY);
-    protected static final GeolocationParams geoParams = new GeolocationParams();
-    protected static final Geolocation geolocation = API.getGeolocation(geoParams);
-    private static JSONObject OBJ;
+    private static final String API_KEY = "18da31d005e94d3c84fe2cf81d79f114";
+    private final LocationApiInterface LOCATIONDATA = new IPInfoApiTranslator();
+    private final String LAT = LOCATIONDATA.getLocationInfo("Latitude");
+    private final String LON = LOCATIONDATA.getLocationInfo("Longitude");
 
-    public String getSunMoonInfo(String _event){
-        String url = ASTRONOMY_URL + API_KEY + "&ip=" + geolocation.getIPAddress();
+    /**
+     * Returns time expected for sunrise/set and moon rise/set based on the
+     * users location. Uses IPGEOLocation API. Strings allowed can be found in
+     * the Info Accessible through API google doc.
+     */
+    public String getSunMoonInfo(String _event) {
+        String url = ASTRONOMY_URL + API_KEY + "&lat=" + LAT + "&long=" + LON;
+        String param = _event.toLowerCase();
         getConnection(url);
-        try {
-            return OBJ.getString(_event);
-        } catch (JSONException ex) {
-            Logger.getLogger(SunMoonRiseApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
-            return "Invalid Params";
-        }
-    }
 
-    private static void getConnection(String _urlString) {
-        URL url;
         try {
-            url = new URL(_urlString);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            //int status = con.getResponseCode();
-            //System.out.println("Response Code: " + status);
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
+            if (OBJ.getString(param).equals("-:-")) {
+                return "No moonset / moonrise for this date.";
+            } else {
+                return OBJ.getString(param);
             }
-            in.close();
-            con.disconnect();
-
-            OBJ = new JSONObject(content.toString());
-        } catch (Exception ex) {
-            Logger.getLogger(SunMoonRiseApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            return "Invalid Params. Check spelling";
         }
+
     }
 }
