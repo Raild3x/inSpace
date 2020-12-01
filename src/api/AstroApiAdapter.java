@@ -1,5 +1,6 @@
-package astroapi;
+package api;
 
+import java.util.ArrayList;
 import org.json.JSONObject;
 
 /**
@@ -20,4 +21,9 @@ public class AstroApiAdapter {
      public String[] getMoonsAsArray(String _body) {
         return AstroAdapter.getMoonsAsArray(_body);
     }
+
+    public ArrayList<String> getBodyMoons(String _body) {
+        return AstroAdapter.getBodyMoons(_body);
+    }
+
 }
