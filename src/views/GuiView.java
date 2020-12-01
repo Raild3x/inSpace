@@ -1,4 +1,3 @@
-
 package views;
 
 import listeners.HoverListener;
@@ -28,7 +27,7 @@ import javafx.scene.layout.HBox;
  * @author szoor
  */
 public class GuiView implements HoverListener, SelectedListener {
-
+    
     private final GuiController guiController;
     private static GuiView instance;
 
@@ -60,7 +59,7 @@ public class GuiView implements HoverListener, SelectedListener {
      */
     private GuiView() {
         this.guiController = GuiController.getInstance();
-
+        
         this.planetNameLabel = new Label();
         this.zoomLabel = new Label();
         this.title = new Label();
@@ -70,7 +69,7 @@ public class GuiView implements HoverListener, SelectedListener {
         this.infoPane = new VBox();
         this.loading = new Label(" ");
         this.popUpButtons = new HBox();
-
+        
         this.init();
     }
 
@@ -83,7 +82,7 @@ public class GuiView implements HoverListener, SelectedListener {
         }
         return instance;
     }
-
+    
     public void init() {
         HoverEvent.addListener(this);
         SelectedEvent.addListener(this);
@@ -94,27 +93,27 @@ public class GuiView implements HoverListener, SelectedListener {
      * Organizational method for setting up all the gui properties
      */
     public void initGui() {
-
+        
         final Label appName = new Label();
         appName.setText("inSpace");
         appName.setStyle("-fx-text-fill : white; -fx-opacity : 0.3;");
-
+        
         appName.setAlignment(Pos.TOP_CENTER);
         appName.setTranslateY(-395);
         appName.setFont(Font.font(30));
         this.guiController.addGuiObject(appName);
-
+        
         this.loading.setText("Loading...");
         this.loading.setAlignment(Pos.CENTER);
         this.loading.setFont(Font.font(30));
         this.loading.setStyle("-fx-text-fill : white; -fx-opacity : 0.8;");
         this.guiController.addGuiObject(this.loading);
-
+        
         this.zoomLabel.setStyle("-fx-text-fill : white; -fx-opacity : 0.3;");
         this.zoomLabel.setTranslateX(600);
         this.zoomLabel.setTranslateY(-400);
         this.zoomLabel.setFont(Font.font(15));
-
+        
         RenderService.PostRenderstep.Connect(dt -> {
             zoomLabel.setText("ZOOM: " + Double.toString(Math.ceil(RenderService.getInstance().getZoom() * 10) / 10));
         });
@@ -126,40 +125,42 @@ public class GuiView implements HoverListener, SelectedListener {
 
         //===============================info window components===============================
         this.title.setAlignment(Pos.CENTER);
-        this.title.setStyle("-fx-text-fill : white;");
+        this.title.setStyle("-fx-text-fill : silver;");
         this.title.isWrapText();
-        this.title.setOpacity(1);
+        this.title.setOpacity(.8);
         this.title.setFont(Font.font(35));
-
+        
         this.info.setAlignment(Pos.CENTER);
-        this.info.setStyle("-fx-text-fill : black;");
-        this.info.setFont(Font.font(14));
+        this.info.setStyle("-fx-text-fill : white;");
+        this.info.setFont(Font.font(15));
         Color col = Color.SILVER;
-        CornerRadii corner = new CornerRadii(10);
-        Background background = new Background(new BackgroundFill(col, corner, Insets.EMPTY));
-        info.setBackground(background);
-
+        // corner = new CornerRadii(10);
+        //Background background = new Background(new BackgroundFill(col, corner, Insets.EMPTY));
+        //info.setBackground(background);
+        info.setStyle("-fx-border-style: solid; -fx-background-color: black;");
+        
         this.close.setText("Close");
         this.close.setAlignment(Pos.BOTTOM_CENTER);
-        this.close.setStyle("-fx-text-fill : black;");
-        this.close.setStyle("-fx-background-color : grey;");
-
+        this.close.setStyle("-fx-text-fill : white;");
+        this.close.setStyle("-fx-background-color : black;");
+        
         this.zoomButton.setText("Zoom to Planet");
         this.zoomButton.setAlignment(Pos.BOTTOM_CENTER);
-        this.zoomButton.setStyle("-fx-text-fill : black;");
-        this.zoomButton.setStyle("-fx-background-color : grey;");
-
+        this.zoomButton.setStyle("-fx-text-fill : white;");
+        this.zoomButton.setStyle("-fx-background-color : black;");
+        
         this.popUpButtons.getChildren().addAll(this.zoomButton, this.close);
         this.popUpButtons.setAlignment(Pos.CENTER);
+        this.popUpButtons.setSpacing(6);
 
         //this.infoPane.setStyle("-fx-background-color : silver;");
         this.infoPane.setTranslateX(450);
         this.infoPane.setTranslateY(0);
         this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 3, this.guiController.getCanvas().getHeight() - 250);
-        this.infoPane.setOpacity(0.5);
+        this.infoPane.setOpacity(0.8);
         this.infoPane.setAlignment(Pos.CENTER);
         this.infoPane.getChildren().addAll(this.title, this.info, popUpButtons);
-        this.infoPane.setSpacing(70.0);
+        this.infoPane.setSpacing(30.0);
 
 //        //get sun rise and set info based on current IP and display it to user
 //        this.date.setText(guiController.getSunMoonRiseAdapter("date"));
@@ -178,12 +179,11 @@ public class GuiView implements HoverListener, SelectedListener {
         //testing print statement
         System.out.println("Selected: " + cbc.getName());
         guiController.zoomPlanet(cbc.getName());
-
+        
         this.title.setText(cbc.getName());
-
         Thread loadData = new Thread() {
             public void run() {
-
+                
                 mass = cbc.getInfo("mass");
                 inclination = cbc.getInfo("inclination");
                 radius = cbc.getInfo("meanRadius");
@@ -196,29 +196,28 @@ public class GuiView implements HoverListener, SelectedListener {
             }
         };
         loadData.start();
-
         this.info.setText("   \n Eccentricity: " + eccentricity + "   \n\n  Inclination: "
                 + inclination + "   \n\n  Radius: " + radius
                 + "   \n\n  Density: " + density + "   \n\n  Gravity: " + gravity
                 + "   \n\n  Axial Tilt: " + axialTilt + "\n\n  Mass: " + mass + "   \n ");
-
+        
         try {
             this.guiController.getStackPane().getChildren().remove(loading);
         } catch (URISyntaxException ex) {
             Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         this.guiController.addGuiObject(this.infoPane);
-
+        
         try {
-
+            
             if (cbc.isPlanet() && !guiController.getStackPane().getChildren().contains(this.zoomButton)) {
                 //guiController.addGuiObject(this.zoomButton);
                 this.zoomButton.setVisible(true);
             } else {
                 //guiController.removeGuiObject(this.zoomButton);
                 this.zoomButton.setVisible(false);
-
+                
             }
         } catch (URISyntaxException ex) {
             Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
@@ -226,34 +225,34 @@ public class GuiView implements HoverListener, SelectedListener {
         this.zoomButton.setOnAction(e -> {
             cbc.zoomIn();
         });
-
+        
         this.close.setOnAction(e -> {
             this.guiController.removeGuiObject(this.infoPane);
             guiController.recenter();
-
+            
         });
     }
-
+    
     @Override
     public void UnSelected(CelestialBodyController cbc) {
         System.out.println("Unselected: " + cbc.getName());
-
+        
         this.guiController.removeGuiObject(this.infoPane);
-        //guiController.recenter();
-
+        
     }
-
+    
     @Override
     public void HoverBegan(CelestialBodyController cbc) {
         //System.out.println("Began hovering over: " + cbc.getName());
         this.planetNameLabel.setText(cbc.getName());
         this.guiController.addGuiObject(planetNameLabel);
+        
     }
-
+    
     @Override
     public void HoverEnded(CelestialBodyController cbc) {
         //System.out.println("Stopped hovering over: " + cbc.getName());
         this.guiController.removeGuiObject(planetNameLabel);
     }
-
+    
 }
