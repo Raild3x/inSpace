@@ -3,8 +3,9 @@ package api;
 public class AstroTestClass {
 
     /*
-    Test class to test the fixParams method in AstroApiTranslator. Tests Moons,satellites and planets,
-    ensures params that are case-sensitive still work
+    Test class to test the fixParams method in AstroApiTranslator. Any mispellings are made
+    To test the fixParams helper method in AstroApiTranslator.
+    Error cases at lines 33,34,37,38,55,57,59,61,62
      */
     public static void test() {
         AstroApiAdapter testing = new AstroApiAdapter();
@@ -60,16 +61,14 @@ public class AstroTestClass {
         System.out.println(testing.getBodyInfo("earth", "planets its around")); //Invalid param
         System.out.println(testing.getBodyInfo("earth", "axialtillt")); //Invalid param
 
-        System.out.println(testing.getBodyInfo("Epiméthée"));
-        System.out.println(testing.getBodyInfo("Phœbé"));
-        System.out.println(testing.getBodyInfo("Hypérion"));
-        System.out.println(testing.getBodyInfo("Hélène"));
-        System.out.println(testing.getBodyInfo("S/2004 S 7"));
-        System.out.println(testing.getBodyInfo("S/2004 S 12"));
-        System.out.println(testing.getBodyInfo("Deïmos"));
-        System.out.println(testing.getBodyInfo("Néreïde"));
-        System.out.println(testing.getBodyInfo("S/2003 J 4"));
-        System.out.println(testing.getBodyInfo("S/2017 J 5"));
-        System.out.println(testing.getBodyInfo("S/2011 J 2"));
+        System.out.println(testing.getBodyInfo("Epiméthée", "aroundPlanet"));
+        System.out.println(testing.getBodyInfo("Phœbé","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("Hypérion","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("Hélène","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("S/2004 S 7","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("S/2004 S 12","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("Deïmos","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("Néreïde","aroundPlanet"));
+        System.out.println(testing.getBodyInfo("S/2003 J 4","aroundPlanet"));
     }
 }
