@@ -1,5 +1,6 @@
 package controllers;
 
+import api.SunMoonRiseAdapter;
 import java.awt.Color;
 import java.io.File;
 import javafx.scene.canvas.Canvas;
@@ -50,7 +51,7 @@ public class GuiController {
         }
         return instance;
     }
-    
+
     // Initializes aspects about the guiController
     private void init() {
         try {
@@ -58,7 +59,7 @@ public class GuiController {
         } catch (URISyntaxException ex) {
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         this.progressBar.setStyle("-fx-background-color: black;");
         this.progressBar.setBorder(Border.EMPTY);
         this.progressBar.setMinWidth(80);
@@ -86,7 +87,7 @@ public class GuiController {
 
     public void recenter() {
         PlanetService.unFocus();
-        RenderService.getInstance().setZoom(Math.min(RenderService.getInstance().getZoom()/4, 250));
+        RenderService.getInstance().setZoom(Math.min(RenderService.getInstance().getZoom() / 4, 250));
     }
 
     public void zoomPlanet(String name) {
@@ -109,7 +110,7 @@ public class GuiController {
         ImageView imageView;
         File file;
         Image image;
-        
+
         switch (request) {
             case "background": //set background
                 file = new File("images\\background1.png");
@@ -178,7 +179,7 @@ public class GuiController {
                 image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
                 imageView = new ImageView(image);
                 break;
-                
+
             default:
                 file = new File("images\\moon.png"); // CHANGE THIS TO SOME RANDOM MOON THING
                 image = new Image(file.toURI().toString(), this.WIDTH, this.HEIGHT, true, true, true);
@@ -187,10 +188,11 @@ public class GuiController {
 
         return imageView;
     }
-    
-    
-    public ProgressBar getProgressBar() {
-        return this.progressBar;
-    }
 
-            }
+    public String getSunMoonRiseAdapter(String str) {
+        SunMoonRiseAdapter sunMoon = new SunMoonRiseAdapter();
+        sunMoon.getSunMoonInfo(str);
+        String event = sunMoon.getSunMoonInfo(str);
+        return event;
+    }
+}
