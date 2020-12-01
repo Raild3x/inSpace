@@ -101,9 +101,10 @@ public class PlanetService {
 
                 updateMessage("Done!");
                 updateProgress(9, 9);
-
+                
+                /*
                 // Use api to get other planet moons
-                /*ArrayList<CelestialBody> Moons = new ArrayList<>();
+                ArrayList<CelestialBody> Moons = new ArrayList<>();
                 celestialBodyControllers.forEach((name,controller) -> {
                     if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
                         System.out.println("Loading moons for: "+name);
