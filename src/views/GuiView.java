@@ -43,6 +43,7 @@ public class GuiView implements HoverListener, SelectedListener {
     private Label sunrise;
     private Label sunset;
     private Label date;
+    HBox popUpButtons;
 
     //info strings
     String mass;
@@ -67,6 +68,7 @@ public class GuiView implements HoverListener, SelectedListener {
         this.zoomButton = new Button();
         this.infoPane = new VBox();
         this.loading = new Label(" ");
+        this.popUpButtons = new HBox();
 
         this.init();
     }
@@ -92,18 +94,6 @@ public class GuiView implements HoverListener, SelectedListener {
      */
     public void initGui() {
 
-//        DropShadow ds = new DropShadow();
-//        ds.setOffsetY(3.0f);
-//        ds.setColor(Color.BLACK);
-//        final Text inSpace = new Text();
-//        inSpace.setEffect(ds);
-//        inSpace.setCache(true);        
-//        
-//        inSpace.setTextAlignment(TextAlignment.CENTER);
-//        inSpace.setY(-395.0f);
-//        inSpace.setFill(Color.GHOSTWHITE);
-//        inSpace.setText("inSpace");
-//       inSpace.setOpacity(0.3);
         final Label appName = new Label();
         appName.setText("inSpace");
         appName.setStyle("-fx-text-fill : white; -fx-opacity : 0.3;");
@@ -157,15 +147,14 @@ public class GuiView implements HoverListener, SelectedListener {
         this.zoomButton.setAlignment(Pos.BOTTOM_CENTER);
         this.zoomButton.setStyle("-fx-text-fill : black;");
         this.zoomButton.setStyle("-fx-background-color : grey;");
-        
-        HBox popUpButtons = new HBox();
-        popUpButtons.getChildren().addAll(this.zoomButton, this.close);
-        popUpButtons.setAlignment(Pos.CENTER);
+
+        this.popUpButtons.getChildren().addAll(this.zoomButton, this.close);
+        this.popUpButtons.setAlignment(Pos.CENTER);
 
         //this.infoPane.setStyle("-fx-background-color : silver;");
         this.infoPane.setTranslateX(450);
         this.infoPane.setTranslateY(0);
-        this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 4, this.guiController.getCanvas().getHeight() - 290);
+        this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 3, this.guiController.getCanvas().getHeight() - 250);
         this.infoPane.setOpacity(0.5);
         this.infoPane.setAlignment(Pos.CENTER);
         this.infoPane.getChildren().addAll(this.title, this.info, popUpButtons);
@@ -184,9 +173,8 @@ public class GuiView implements HoverListener, SelectedListener {
     //======================================== EVENT RECIEVERS ===========================================//
     @Override
     public void Selected(CelestialBodyController cbc) {
-        this.zoomButton.setVisible(true);
 
-        //===============================Code for Planet Info Windows================================================
+        //testing print statement
         System.out.println("Selected: " + cbc.getName());
         guiController.zoomPlanet(cbc.getName());
 
@@ -194,14 +182,6 @@ public class GuiView implements HoverListener, SelectedListener {
 
         Thread loadData = new Thread() {
             public void run() {
-//                while (!ready) {
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException ex) {
-//                        Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                }
-//                ready = false;
 
                 mass = cbc.getInfo("mass");
                 inclination = cbc.getInfo("inclination");
@@ -216,29 +196,10 @@ public class GuiView implements HoverListener, SelectedListener {
         };
         loadData.start();
 
-//        Thread deleteLoadLabel = new Thread() {
-//
-//            public synchronized void run() {
-//                while (ready) {
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException ex) {
-//                        Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                }
-//                ready = true;
-//
-//                loading.setText(" ");
-//
-//                notifyAll();
-//
-//            }
-//        };
-//        deleteLoadLabel.start();
-        this.info.setText("\n  Mass: " + mass + "  \n\n  Inclination: "
-                + inclination + "\n\n  Radius: " + radius
-                + "\n\n  Density: " + density + "\n\n  Gravity: " + gravity
-                + "\n\n  Axial Tilt: " + axialTilt + "\n\n  Eccentricity: " + eccentricity + "\n ");
+        this.info.setText("   \n Eccentricity: " + eccentricity + "   \n\n  Inclination: "
+                + inclination + "   \n\n  Radius: " + radius
+                + "   \n\n  Density: " + density + "   \n\n  Gravity: " + gravity
+                + "   \n\n  Axial Tilt: " + axialTilt + "\n\n  Mass: " + mass + "   \n ");
 
         try {
             this.guiController.getStackPane().getChildren().remove(loading);
@@ -248,16 +209,18 @@ public class GuiView implements HoverListener, SelectedListener {
 
         this.guiController.addGuiObject(this.infoPane);
 
-// moved this to a thread
-//        this.info.setText("\n  Mass: " + cbc.getInfo("mass") + "  \n\n  Inclination: "
-//                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
-//                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
-//                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity") + "\n ");
-        if (cbc.isPlanet()) {
-            this.zoomButton.setVisible(true);
-        } else {
-            this.zoomButton.setVisible(false);
-            
+        try {
+
+            if (cbc.isPlanet() && !guiController.getStackPane().getChildren().contains(this.zoomButton)) {
+                //guiController.addGuiObject(this.zoomButton);
+                this.zoomButton.setVisible(true);
+            } else {
+                //guiController.removeGuiObject(this.zoomButton);
+                this.zoomButton.setVisible(false);
+
+            }
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.zoomButton.setOnAction(e -> {
             cbc.zoomIn();
