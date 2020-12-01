@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package events;
 
 import controllers.CelestialBodyController;
@@ -12,34 +7,45 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- *
  * @author Logan
+ * @lastModified 10/25/2020
+ *
+ * @description The SelectedEvent class manages the firing of the methods of any
+ * connected SelectedListeners
  */
 public class SelectedEvent {
+
     private static Collection listeners = new HashSet();
-    
-    public static void addListener(SelectedListener listener) {
-        listeners.add(listener);
+
+    // Adds a listener to the list for execution.
+    // @param _listener The listener to be added.
+    public static void addListener(SelectedListener _listener) {
+        listeners.add(_listener);
     }
-    
-    public static void removeListener(SelectedListener listener) {
-        listeners.remove(listener);
+
+    // Removes a listener from the list.
+    // @param _listener The listener to be removed.
+    public static void removeListener(SelectedListener _listener) {
+        listeners.remove(_listener);
     }
-    
-    public static void fireSelected(CelestialBodyController cbc) {
-        //HoverEvent event = new HoverEvent(this, "open");
+
+    // Called from PlanetService to fire any connected listeners Selected methods.
+    // @param _cbc The CelestialBodyController which was selected.
+    public static void fireSelected(CelestialBodyController _cbc) {
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
             SelectedListener listener = (SelectedListener) iter.next();
-            listener.Selected(cbc);
+            listener.Selected(_cbc);
         }
     }
-    
-    public static void fireUnSelected(CelestialBodyController cbc) {
+
+    // Called from PlanetService to fire any connected listeners UnSelected methods.
+    // @param _cbc The CelestialBodyController which was unselected.
+    public static void fireUnSelected(CelestialBodyController _cbc) {
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
             SelectedListener listener = (SelectedListener) iter.next();
-            listener.UnSelected(cbc);
+            listener.UnSelected(_cbc);
         }
     }
 }

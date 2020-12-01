@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 
 /**
  * @author Logan
- * @lastModified 11/4/2020
+ * @lastModified 12/1/2020
  *
  * @description The MouseView class acts to retrieve all mouse related input and
  * pass it to the MouseInputController for handling.
@@ -19,9 +19,6 @@ public class MouseView implements InputView {
         Canvas screen = GuiController.getInstance().getCanvas();
         MouseInputController mic = MouseInputController.getInstance();
         //set response to mouse events
-        screen.setOnMouseClicked((MouseEvent event) -> {
-            mic.mouseClicked(event);
-        });
         screen.setOnMouseDragged((MouseEvent event) -> {
             mic.mouseDragged(event);
         });
