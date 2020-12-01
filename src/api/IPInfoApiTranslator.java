@@ -10,14 +10,14 @@ import org.json.JSONObject;
 public class IPInfoApiTranslator extends APIConnect implements LocationApiInterface {
 
     private static final String API_URL = "http://ip-api.com/json/";
-    private static JSONObject OBJ;
+    private static JSONObject obj;
 
 //Returns specified info (_placeInfo) on the users location. Returns that info in a String.
     public String getLocationInfo(String _placeInfo) {
         String urlString = API_URL;
-        OBJ = getConnection(urlString);
+        obj = getConnection(urlString);
         try {
-            return OBJ.getString(fixParams(_placeInfo));
+            return obj.getString(fixParams(_placeInfo));
         } catch (JSONException ex) {
             return "JSONException: Info not found";
         }
