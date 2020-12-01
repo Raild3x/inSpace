@@ -11,15 +11,14 @@ import org.json.JSONObject;
 /**
  *
  * @author sytiva
- *
  * Utilized by the API Translators to retrieve information that comes in the form of a JSON.
  */
 public class APIConnect {
 
-    protected static JSONObject OBJ;
+    private static JSONObject obj;
     protected static boolean noReturn = false;   //Ensures results of previous calls are not returned twice if current API call fails due to bad params
 
-    protected static void getConnection(String _urlString) {
+    protected static JSONObject getConnection(String _urlString) {
         URL url;
         try {
             url = new URL(_urlString);
@@ -35,10 +34,11 @@ public class APIConnect {
             in.close();
             con.disconnect();
 
-            OBJ = new JSONObject(content.toString());
+            obj = new JSONObject(content.toString());
         } catch (IOException | JSONException ex) {
             System.out.println("Exception at getConnection");
             noReturn = true;
         }
+        return obj;
     }
 }
