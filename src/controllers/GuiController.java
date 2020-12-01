@@ -1,7 +1,6 @@
 package controllers;
 
 import api.SunMoonRiseAdapter;
-import java.awt.Color;
 import java.io.File;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.StackPane;
@@ -10,14 +9,12 @@ import javafx.scene.image.Image;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import services.RenderService;
 import services.PlanetService;
 
 /**
- * @author Logan Hunt
+ *
  * @author szoor
  */
 public class GuiController {
@@ -57,14 +54,12 @@ public class GuiController {
         } catch (URISyntaxException ex) {
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //this.progressBar.setStyle("-fx-background-color: black;");
-        //this.progressBar.setBorder(Border.EMPTY);
-        //this.progressBar.setMinWidth(80);
     }
 
     /**
-     * Adds a gui object node (Label, Button, etc..) to the stackPane to be displayed.
+     * Adds a gui object node (Label, Button, etc..) to the stackPane to be
+     * displayed.
+     *
      * @param _kids Varargs array of Nodes to be added.
      */
     public void addGuiObject(Node... _kids) {
@@ -75,6 +70,7 @@ public class GuiController {
 
     /**
      * Removes a gui object node (Label, Button, etc..) from the stackPane.
+     *
      * @param _kids Varargs array of Nodes to be added.
      */
     public void removeGuiObject(Node... _kids) {
@@ -187,9 +183,10 @@ public class GuiController {
         return imageView;
     }
 
+    //call for info from API
     public String getSunMoonRiseAdapter(String str) {
+
         SunMoonRiseAdapter sunMoon = new SunMoonRiseAdapter();
-        sunMoon.getSunMoonInfo(str);
         String event = sunMoon.getSunMoonInfo(str);
         return event;
     }

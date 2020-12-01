@@ -112,13 +112,9 @@ public class PlanetService {
                     if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
                         System.out.println("Loading moons for: " + name);
                         try {
-                            int i = 0;
                             for (String moonName : controller.getMoons()) {
                                 CelestialBody moon = new CelestialBody(moonName, controller.getModel());
                                 Moons.add(moon);
-                                i++;
-                                if (i > 5)
-                                    break;
                             }
                         } catch (Exception e) {
                             System.out.println("Issue loading moons: " + e);
