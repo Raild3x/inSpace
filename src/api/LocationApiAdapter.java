@@ -6,10 +6,9 @@ package api;
  */
 public class LocationApiAdapter {
 
-    final LocationApiInterface LocationAdapter = new IPInfoApiTranslator();
+    private final LocationApiInterface locationAdapter = new LocationApiTranslator();
 
     public String getLocationInfo(String _placeInfo) {
-        return LocationAdapter.getLocationInfo(_placeInfo);
+        return locationAdapter.getLocationInfo(_placeInfo);
     }
-
 }
