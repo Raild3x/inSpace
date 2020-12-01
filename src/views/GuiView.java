@@ -37,6 +37,7 @@ public class GuiView implements HoverListener, SelectedListener {
     private final Label title;
     private final Label info;
     private final Button close;
+    private final Button zoomButton;
     private Label loading;
     private boolean ready;
 
@@ -60,6 +61,7 @@ public class GuiView implements HoverListener, SelectedListener {
         this.title = new Label();
         this.info = new Label();
         this.close = new Button();
+        this.zoomButton = new Button();
         this.infoPane = new VBox();
         this.loading = new Label(" ");
         this.ready = false;
@@ -149,13 +151,19 @@ public class GuiView implements HoverListener, SelectedListener {
         this.close.setStyle("-fx-text-fill : black;");
         this.close.setStyle("-fx-background-color : grey;");
 
+        this.zoomButton.setText("Zoom in to Moons.");
+        this.zoomButton.setAlignment(Pos.BOTTOM_CENTER);
+        this.zoomButton.setTranslateY(-150);
+        this.zoomButton.setStyle("-fx-text-fill : black;");
+        this.zoomButton.setStyle("-fx-background-color : grey;");
+
         //this.infoPane.setStyle("-fx-background-color : silver;");
         this.infoPane.setTranslateX(450);
         this.infoPane.setTranslateY(0);
         this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 4, this.guiController.getCanvas().getHeight() - 290);
         this.infoPane.setOpacity(0.5);
         this.infoPane.setAlignment(Pos.CENTER);
-        this.infoPane.getChildren().addAll(this.title, this.info, this.close);
+        this.infoPane.getChildren().addAll(this.title, this.info, this.close, this.zoomButton);
         this.infoPane.setSpacing(70.0);
 
     }
@@ -231,7 +239,16 @@ public class GuiView implements HoverListener, SelectedListener {
 //                + cbc.getInfo("inclination") + "\n\n  Radius: " + cbc.getInfo("meanRadius")
 //                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
 //                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity") + "\n ");
-        close.setOnAction(e -> {
+        if (cbc.isPlanet()) {
+            this.zoomButton.setOpacity(0.5);
+        } else {
+            this.zoomButton.setOpacity(0);
+        }
+        zoomButton.setOnAction(e -> {
+            cbc.zoomIn();
+        });
+
+        this.close.setOnAction(e -> {
             this.guiController.removeGuiObject(this.infoPane);
             guiController.recenter();
 

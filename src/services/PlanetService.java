@@ -14,18 +14,20 @@ import javafx.scene.paint.Color;
 import models.CelestialBody;
 import controllers.CelestialBodyController;
 import controllers.GuiController;
-import controllers.Signal;
 import events.HoverEvent;
 import events.SelectedEvent;
 import java.util.ArrayList;
 import models.InputModel;
-import views.MouseView;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.concurrent.Task;
-import org.json.JSONException;
 
+/**
+ * @author Logan
+ * @lastModified 12/1/2020
+ *
+ * @description The PlanetService class acts as a subset of main, it loads in
+ * all the planets/moons and their data and manages their related events.
+ */
 public class PlanetService {
 
     private static final RenderService renderService = RenderService.getInstance();
@@ -52,9 +54,10 @@ public class PlanetService {
         AstroApiAdapter AstroApi = new AstroApiAdapter();
 
         // Create celestial bodies
-        CelestialBody Sun = new CelestialBody("Sun", 526.90, Color.YELLOW);//4326.90
+        CelestialBody Sun = new CelestialBody("Sun", Color.YELLOW);//4326.90
         initNewCelestialBody(Sun);
 
+        // Create a new thread to load the planets in so they dont lag the renderer.
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -101,41 +104,49 @@ public class PlanetService {
 
                 updateMessage("Done!");
                 updateProgress(9, 9);
-                
-                /*
+
                 // Use api to get other planet moons
                 ArrayList<CelestialBody> Moons = new ArrayList<>();
-                celestialBodyControllers.forEach((name,controller) -> {
+                celestialBodyControllers.forEach((name, controller) -> {
                     if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
-                        System.out.println("Loading moons for: "+name);
-                        for (String moonName : controller.getMoons()) {
-                            CelestialBody moon = new CelestialBody(moonName, controller.getModel(), Color.GRAY);
-                            Moons.add(moon);
+                        System.out.println("Loading moons for: " + name);
+                        try {
+                            int i = 0;
+                            for (String moonName : controller.getMoons()) {
+                                CelestialBody moon = new CelestialBody(moonName, controller.getModel());
+                                Moons.add(moon);
+                                i++;
+                                if (i > 1) // test code (REMOVE)
+                                {
+                                    break;
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Issue loading moons: " + e);
                         }
                     }
                 });
-                
+
                 System.out.println("Initializing Moon Controllers.");
                 //Create moon controllers afterwards so it doesnt cause issues in the foreach
                 for (CelestialBody moon : Moons) {
                     CelestialBodyController cbc = new CelestialBodyController(moon);
                     celestialBodyControllers.put(moon.name, cbc);
-                }*/
+                }
+
+                System.out.println("LOADING COMPLETE!");
                 return null;
             }
         };
         GuiController.getInstance().getProgressBar().progressProperty().bind(task.progressProperty());
         new Thread(task).start();
 
-        //CelestialBody Moon = new CelestialBody("Moon", 10.79, Earth, 0.002569, 0.002569, 0.0, Color.GRAY);
-        //initNewCelestialBody(Moon);
-
         // Set initial focus
         renderService.setFocus("Sun");
     }
 
     /*
-    An organizational method to split up the code. Manages the creation of any events needed to manage the planets.
+     * An organizational method to split up the code. Manages the creation of any events needed to manage the planets.
      */
     private static void initPlanetEvents() {
         InputModel input = InputModel.getInstance();
@@ -165,7 +176,9 @@ public class PlanetService {
                     dist = cd;
                 }
             });
-            if (dist < 10) { // Change how close you need to be to the orbit here to trigger the Hover events
+
+            // Change how close you need to be to the orbit here to trigger the Hover events
+            if (dist < 10) {
                 if (closest != lastClosest) {
                     if (lastClosest != null) {
                         HoverEvent.fireHoverEnded(lastClosest);
@@ -180,7 +193,6 @@ public class PlanetService {
                 closest = null;
             }
         });
-
     }
 
     /*

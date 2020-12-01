@@ -6,16 +6,17 @@
 package services;
 
 /**
- *
  * @author Logan
+ * @lastModified 12/1/2020
+ *
+ * @description The RenderService class manages the overarching rendering
+ * system. Controlling what is rendered and when. It also manages zoom and
+ * focusing as they are subsections of rendering.
  */
 import controllers.CelestialBodyController;
 import controllers.GuiController;
-import models.CelestialBody;
 import controllers.Signal;
 import models.InputModel;
-import views.MouseView;
-import java.io.FileInputStream;
 
 import java.util.ArrayList;
 import javafx.util.Duration;
@@ -24,14 +25,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class RenderService {
 
@@ -50,7 +46,7 @@ public class RenderService {
     //public static final int WIDTH = 1200;
     //public static final int HEIGHT = 1000;
     public static final int FPS = 60;
-    public static final int MAX_ZOOM = 4000;
+    public static final int MAX_ZOOM = 100000;
     public static final int MIN_ZOOM = 5;
 
     // Signals
@@ -112,18 +108,19 @@ public class RenderService {
         this.scene.setFill(Color.BLACK);
         this.stage.setScene(this.scene);
         this.stage.show();
-        
+
         this.startRendering();
     }
-    
+
+    // Starts the timeline for the rendering
     public void startRendering() {
         System.out.println("Beginning Render.");
         try {
             GuiController gc = GuiController.getInstance();
-        
+
             Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000 / FPS), e -> run(this.gc)));
             tl.setCycleCount(Timeline.INDEFINITE);
-            
+
             gc.addGuiObject(canvas);
             this.stage.setScene(scene);
             this.stage.show();
@@ -154,8 +151,13 @@ public class RenderService {
         // Do update logic
         this.ZOOM += (this.goalZOOM - this.ZOOM) / 5;
         if (this.currentPlanetFocus != null) {
-            this.offsetX += (this.currentPlanetFocus.getX() - this.offsetX) / 5;
-            this.offsetY += (this.currentPlanetFocus.getY() - this.offsetY) / 5;
+            if (this.currentPlanetFocus.isRealisticSize()) {
+                this.offsetX = this.currentPlanetFocus.getX();
+                this.offsetY = this.currentPlanetFocus.getY();
+            } else {
+                this.offsetX += (this.currentPlanetFocus.getX() - this.offsetX) / 5;
+                this.offsetY += (this.currentPlanetFocus.getY() - this.offsetY) / 5;
+            }
         }
 
         // set background color
@@ -180,7 +182,7 @@ public class RenderService {
         } catch (Exception e) {
             System.out.println("Failed to access arraylist");
         }
-        
+
         // Draw Objects //
         // offset camera
         _gc.translate(-dx, -dy);
@@ -195,7 +197,7 @@ public class RenderService {
         } catch (Exception e) {
             System.out.println("Failed to access arraylist");
         }
-        
+
         //reset camera
         _gc.translate(dx, dy);
 
@@ -210,7 +212,7 @@ public class RenderService {
     public void addInstance(CelestialBodyController _obj) {
         gameObjects.add(_obj);
     }
-    
+
     /*
     Removes the Controller of a given CelestialBody from the gameObjects arraylist.
     @param _obj The CelestialBodyController that is going to be removed.
@@ -235,7 +237,7 @@ public class RenderService {
     public double getOffsetY() {
         return this.offsetY - this.canvas.getHeight() / 2;
     }
-    
+
     public long getElapsedTime() {
         return System.currentTimeMillis() - this.startTime;
     }
@@ -244,7 +246,7 @@ public class RenderService {
     public void setFocus(String _currentPlanetFocus) {
         this.currentPlanetFocus = PlanetService.getPlanetController(_currentPlanetFocus);
     }
-    
+
     public void setZoom(double newZoom) {
         this.goalZOOM = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
     }

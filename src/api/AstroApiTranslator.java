@@ -24,7 +24,6 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         getConnection(url);
         try {
             if (noReturn == false) {
-                
                 return OBJ.getString(fixParam(_dataWanted));
             }
         } catch (NullPointerException | JSONException ex) {
