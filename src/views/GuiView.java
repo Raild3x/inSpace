@@ -20,6 +20,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 
 /**
  *
@@ -39,7 +40,9 @@ public class GuiView implements HoverListener, SelectedListener {
     private final Button close;
     private final Button zoomButton;
     private Label loading;
-    private boolean ready;
+    private Label sunrise;
+    private Label sunset;
+    private Label date;
 
     //info strings
     String mass;
@@ -64,7 +67,6 @@ public class GuiView implements HoverListener, SelectedListener {
         this.zoomButton = new Button();
         this.infoPane = new VBox();
         this.loading = new Label(" ");
-        this.ready = false;
 
         this.init();
     }
@@ -150,11 +152,14 @@ public class GuiView implements HoverListener, SelectedListener {
         this.close.setStyle("-fx-text-fill : black;");
         this.close.setStyle("-fx-background-color : grey;");
 
-        this.zoomButton.setText("Zoom in to Moons.");
+        this.zoomButton.setText("Zoom to Planet");
         this.zoomButton.setAlignment(Pos.BOTTOM_CENTER);
-        this.zoomButton.setTranslateY(-150);
         this.zoomButton.setStyle("-fx-text-fill : black;");
         this.zoomButton.setStyle("-fx-background-color : grey;");
+        
+        HBox popUpButtons = new HBox();
+        popUpButtons.getChildren().addAll(this.zoomButton, this.close);
+        popUpButtons.setAlignment(Pos.CENTER);
 
         //this.infoPane.setStyle("-fx-background-color : silver;");
         this.infoPane.setTranslateX(450);
@@ -162,18 +167,27 @@ public class GuiView implements HoverListener, SelectedListener {
         this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 4, this.guiController.getCanvas().getHeight() - 290);
         this.infoPane.setOpacity(0.5);
         this.infoPane.setAlignment(Pos.CENTER);
-        this.infoPane.getChildren().addAll(this.title, this.info, this.close, this.zoomButton);
+        this.infoPane.getChildren().addAll(this.title, this.info, popUpButtons);
         this.infoPane.setSpacing(70.0);
 
+//        //get sun rise and set info based on current IP and display it to user
+//        this.date.setText(guiController.getSunMoonRiseAdapter("date"));
+//        this.sunrise.setText(guiController.getSunMoonRiseAdapter("sunrise"));
+//        this.sunset.setText(guiController.getSunMoonRiseAdapter("sunset"));
+//        VBox nearMeInfo = new VBox();
+//        nearMeInfo.getChildren().addAll(date, sunrise, sunset);
+//        nearMeInfo.setAlignment(Pos.TOP_LEFT);
+//        this.guiController.addGuiObject(nearMeInfo);
     }
 
     //======================================== EVENT RECIEVERS ===========================================//
     @Override
     public void Selected(CelestialBodyController cbc) {
-        System.out.println("Selected "+cbc.getName());
         // Insert loading bar into screen
         this.guiController.addGuiObject(this.loading);
-        
+
+        this.zoomButton.setVisible(true);
+
         //===============================Code for Planet Info Windows================================================
         System.out.println("Selected: " + cbc.getName());
         guiController.zoomPlanet(cbc.getName());
@@ -242,11 +256,12 @@ public class GuiView implements HoverListener, SelectedListener {
 //                + "\n\n  Density: " + cbc.getInfo("density") + "\n\n  Gravity: " + cbc.getInfo("gravity")
 //                + "\n\n  Axial Tilt: " + cbc.getInfo("axialTilt") + "\n\n  Eccentricity: " + cbc.getInfo("eccentricity") + "\n ");
         if (cbc.isPlanet()) {
-            this.zoomButton.setOpacity(0.5);
+            this.zoomButton.setVisible(true);
         } else {
-            this.zoomButton.setOpacity(0);
+            this.zoomButton.setVisible(false);
+            
         }
-        zoomButton.setOnAction(e -> {
+        this.zoomButton.setOnAction(e -> {
             cbc.zoomIn();
         });
 

@@ -134,7 +134,6 @@ public class PlanetService {
                 return null;
             }
         };
-        GuiController.getInstance().getProgressBar().progressProperty().bind(task.progressProperty());
         new Thread(task).start();
 
         // Set initial focus
