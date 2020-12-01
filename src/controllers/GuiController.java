@@ -58,9 +58,9 @@ public class GuiController {
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        this.progressBar.setStyle("-fx-background-color: black;");
-        this.progressBar.setBorder(Border.EMPTY);
-        this.progressBar.setMinWidth(80);
+        //this.progressBar.setStyle("-fx-background-color: black;");
+        //this.progressBar.setBorder(Border.EMPTY);
+        //this.progressBar.setMinWidth(80);
     }
 
     /**
