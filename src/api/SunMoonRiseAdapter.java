@@ -11,5 +11,4 @@ public class SunMoonRiseAdapter {
     public String getSunMoonInfo(String _event) {
         return sunMoonRiseAdapter.getSunMoonInfo(_event);
     }
-
 }
