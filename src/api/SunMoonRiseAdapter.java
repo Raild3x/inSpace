@@ -6,10 +6,10 @@ package api;
  */
 public class SunMoonRiseAdapter {
 
-    final SunMoonRiseApiInterface SunMoonRiseAdapter = new SunMoonRiseApiTranslator();
+    private final SunMoonRiseApiInterface sunMoonRiseAdapter = new SunMoonRiseApiTranslator();
 
     public String getSunMoonInfo(String _event) {
-        return SunMoonRiseAdapter.getSunMoonInfo(_event);
+        return sunMoonRiseAdapter.getSunMoonInfo(_event);
     }
 
 }
