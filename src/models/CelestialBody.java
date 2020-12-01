@@ -45,7 +45,7 @@ public class CelestialBody {
     public boolean boldOrbit = false;
     public boolean realisticSize = false;
 
-    /*
+    /**
      * Constructor for CelestialBody object.
      * @param _apiName      The string name to be used with the AstroApi to get info.
      * @param _orbitingBody The CelestialBody that this one orbits.
@@ -75,7 +75,7 @@ public class CelestialBody {
         System.out.println("Loaded: " + this.name);
     }
 
-    /*
+    /**
      * Constructor for moon based CelestialBody objects.
      * @param _apiName      The string name to be used with the AstroApi to get info.
      * @param _orbitingBody The CelestialBody that this one orbits.
@@ -83,13 +83,14 @@ public class CelestialBody {
     public CelestialBody(String _apiName, CelestialBody _orbitingBody) {
         this.name = AstroApi.getBodyInfo(_apiName, "englishName");
         this.apiName = _apiName;
-        this.size = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "meanRadius")) * 100;
-        this.semiMajorAxis = PlanetService.kmToAU(Double.parseDouble(AstroApi.getBodyInfo(_apiName, "semimajorAxis"))) * 100;
-        this.eccentricity = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "eccentricity"));
+        this.size = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "meanRadius"));
+        this.semiMajorAxis = PlanetService.kmToAU(Double.parseDouble(AstroApi.getBodyInfo(_apiName, "semimajorAxis")))*10;
+        this.eccentricity = .01; //Double.parseDouble(AstroApi.getBodyInfo(_apiName, "eccentricity"))*10;
         this.semiMinorAxis = (Math.sqrt(Math.pow(this.semiMajorAxis, 2) * (1 - Math.pow(this.eccentricity, 2))));
         this.orbitalPeriod = Math.sqrt(Math.pow((this.semiMajorAxis + this.semiMinorAxis) / 2, 3));
         this.color = Color.GRAY;
         this.orbitingBody = _orbitingBody;
+        this.realisticSize = true;
         this.isPlanet = false;
         this.moons = null;
         try {
@@ -100,7 +101,7 @@ public class CelestialBody {
         System.out.println("Loaded: " + this.name);
     }
 
-    /*
+    /**
      * Constructor for CelestialBody object without any orbital data (The Sun).
      * @param _apiName      The string name to be used with the AstroApi to get info.
      * @param _color        The default color of the planet if the image wont load.
@@ -124,9 +125,9 @@ public class CelestialBody {
         }
     }
 
-    /*
-    Moves the Celestial Body to the given angle along its orbit
-    @param _angle The given angle in degrees along which it should be in its orbit.
+    /**
+     * Moves the Celestial Body to the given angle along its orbit
+     * @param _angle The given angle in degrees along which it should be in its orbit.
      */
     public void move(double _angle) {
         double zoom = RenderService.getInstance().getZoom();
@@ -139,7 +140,7 @@ public class CelestialBody {
         }
     }
 
-    /*
+    /**
      * Called by RenderService to execute the code needed to adjust the CelestialBody to the new position in its orbit
      * @param _dt Time passed since last update
      */
@@ -147,16 +148,16 @@ public class CelestialBody {
         double delta = ((Math.PI * 2) / this.orbitalPeriod) / 1000;
         // if were focused on something other than the sun then slow down time
         if (!RenderService.getInstance().getFocus().getName().equals("Sun")) {
-            delta /= 10;
+            delta /= 1000;
         }
         this.angle += delta;
 
         move(this.angle);
     }
 
-    /*
-    Called by RenderService to execute the code needed to paint the planet and its orbit
-    @param _gc The GraphicsContext to paint on.
+    /**
+     * Called by RenderService to execute the code needed to paint the planet and its orbit
+     * @param _gc The GraphicsContext to paint on.
      */
     public void render(GraphicsContext _gc) {
         double zoom = RenderService.getInstance().getZoom();
@@ -164,7 +165,7 @@ public class CelestialBody {
             if (this.displayOrbit) {
                 // draw orbit
                 _gc.setStroke(Color.GRAY);
-                double x = this.orbitingBody.getX() + this.eccentricity * zoom - (this.semiMajorAxis * zoom);
+                double x = this.orbitingBody.getX() + (this.eccentricity * zoom) - (this.semiMajorAxis * zoom);
                 double y = this.orbitingBody.getY() - (this.semiMinorAxis * zoom);
                 if (this.boldOrbit) {
                     _gc.setLineWidth(2.0);
@@ -179,10 +180,6 @@ public class CelestialBody {
         if (!this.realisticSize && this.boldOrbit && !this.name.equals("Sun")) {
             size *= 3;
         }
-        if (this.realisticSize) {
-            System.out.println(this.name + " Size: " + size);
-        }
-
         if (this.imageView == null || !this.name.equals("Sun")) {
             _gc.fillOval(this.x - size / 2, this.y - size / 2, size, size);
         }
@@ -194,8 +191,9 @@ public class CelestialBody {
         }
     }
 
+    // Action method to zoom in to the planet.
     public void zoomIn() {
-        RenderService.getInstance().setZoom(100000);
+        RenderService.getInstance().setZoom(5000);
         this.realisticSize = true;
     }
 
@@ -205,6 +203,7 @@ public class CelestialBody {
             return;
         }
         for (String moonName : this.moons) {
+            System.out.println("Adding "+moonName);
             RenderService.getInstance().addInstance(PlanetService.getPlanetController(moonName));
         }
     }
@@ -223,14 +222,14 @@ public class CelestialBody {
     // Returns the adjusted size
     public double getSize() {
         double zoom = RenderService.getInstance().getZoom();
-        double size = (this.realisticSize) ? PlanetService.kmToAU(this.size) * (zoom * 100) : (this.size / 600) * (zoom / 350);
+        double size = (this.realisticSize) ? PlanetService.kmToAU(this.size) * (zoom * 50) : (this.size / 600) * (zoom / 350);
         return (!this.name.equals("Sun")) ? (size) : (this.size / 50) * (zoom / 350);
     }
 
-    /*
-    Returns a double representing the distance from a given point to the closest point along the given planet's orbit.
-    @param _px Given point x coordinate.
-    @param _py Given point y coordinate.
+    /**
+     * Returns a double representing the distance from a given point to the closest point along the given planet's orbit.
+     * @param _px Given point x coordinate.
+     * @param _py Given point y coordinate.
      */
     public double getDistToOrbit(double _px, double _py) {
         if (orbitingBody == null) {
@@ -248,16 +247,16 @@ public class CelestialBody {
         return Math.abs(d1 - d2);
     }
 
-    /*
-    Returns a double representing the distance from a given point to the planet in question in terms of screen space
-    @param _px Given point x coordinate.
-    @param _py Given point y coordinate.
+    /**
+     * Returns a double representing the distance from a given point to the planet in question in terms of screen space
+     * @param _px Given point x coordinate.
+     * @param _py Given point y coordinate.
      */
     public double getDistToPlanet(double _px, double _py) {
         return Math.sqrt(Math.pow(getX() - _px, 2) + Math.pow(getY() - _py, 2));
     }
 
-    /*
+    /**
      * Request info about the CelestialBody from AstroApi
      * @param _infoType A string of the property that you want to get from the api
      */

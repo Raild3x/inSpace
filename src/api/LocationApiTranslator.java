@@ -1,27 +1,29 @@
 package api;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
  * @author sytiva
  */
-public class IPInfoApiTranslator extends APIConnect implements LocationApiInterface {
+public class LocationApiTranslator extends APIConnect implements LocationApiInterface {
 
-    private static final String API_URL = "http://ip-api.com/json/";
+    private static final String apiUrl = "http://ip-api.com/json/";
+    private static JSONObject obj;
 
 //Returns specified info (_placeInfo) on the users location. Returns that info in a String.
     public String getLocationInfo(String _placeInfo) {
-        String urlString = API_URL;
-        getConnection(urlString);
+        String urlString = apiUrl;
+        obj = getConnection(urlString);
         try {
-            return OBJ.getString(fixParams(_placeInfo));
+            return obj.getString(fixParams(_placeInfo));
         } catch (JSONException ex) {
             return "JSONException: Info not found";
         }
     }
 
-//Changes any string to correct param needed by the api.
+//Changes any string to correct param or format needed by the api.
     private static String fixParams(String _placeInfo) {
         String toLowerCase = _placeInfo.toLowerCase();
         if ("city".equals(toLowerCase) || "timezone".equals(toLowerCase)) {
