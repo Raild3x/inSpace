@@ -6,7 +6,10 @@ import org.json.JSONObject;
 
 /**
  *
- * @author sytiva
+ * @author sytiva, Logan
+ * @lastModified 12/1/2020
+ * 
+ * @description Adapter for the AstroTranslator class, acts as an intermediary.
  */
 public class AstroApiAdapter {
     private final AstroApiInterface astroAdapter = new AstroApiTranslator();
@@ -23,6 +26,11 @@ public class AstroApiAdapter {
         return astroAdapter.getMoonsAsArray(_body);
     }
 
+    /**
+     * Returns moon apiNames in an ArrayList format.
+     * @param _body
+     * @return 
+     */
     public ArrayList<String> getBodyMoons(String _body) {
         return astroAdapter.getBodyMoons(_body);
     }
