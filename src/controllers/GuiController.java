@@ -17,7 +17,7 @@ import services.RenderService;
 import services.PlanetService;
 
 /**
- *
+ * @author Logan Hunt
  * @author szoor
  */
 public class GuiController {
@@ -28,7 +28,6 @@ public class GuiController {
 
     private final Canvas canvas;
     private final StackPane stackPane;
-    private final ProgressBar progressBar;
 
     protected static GuiController instance;
 
@@ -38,7 +37,6 @@ public class GuiController {
     private GuiController() {
         this.canvas = new Canvas();
         this.stackPane = new StackPane();
-        this.progressBar = new ProgressBar();
         this.init();
     }
 
@@ -65,7 +63,7 @@ public class GuiController {
         this.progressBar.setMinWidth(80);
     }
 
-    /*
+    /**
      * Adds a gui object node (Label, Button, etc..) to the stackPane to be displayed.
      * @param _kids Varargs array of Nodes to be added.
      */
@@ -75,7 +73,7 @@ public class GuiController {
         }
     }
 
-    /*
+    /**
      * Removes a gui object node (Label, Button, etc..) from the stackPane.
      * @param _kids Varargs array of Nodes to be added.
      */

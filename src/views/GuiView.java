@@ -117,7 +117,6 @@ public class GuiView implements HoverListener, SelectedListener {
         this.loading.setAlignment(Pos.CENTER);
         this.loading.setFont(Font.font(30));
         this.loading.setStyle("-fx-text-fill : white; -fx-opacity : 0.8;");
-        this.guiController.addGuiObject(this.loading);
 
         this.zoomLabel.setStyle("-fx-text-fill : white; -fx-opacity : 0.3;");
         this.zoomLabel.setTranslateX(600);
@@ -184,6 +183,9 @@ public class GuiView implements HoverListener, SelectedListener {
     //======================================== EVENT RECIEVERS ===========================================//
     @Override
     public void Selected(CelestialBodyController cbc) {
+        // Insert loading bar into screen
+        this.guiController.addGuiObject(this.loading);
+
         this.zoomButton.setVisible(true);
 
         //===============================Code for Planet Info Windows================================================

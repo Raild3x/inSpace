@@ -1,18 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
-/**
- * @author Logan
- * @lastModified 12/1/2020
- *
- * @description The RenderService class manages the overarching rendering
- * system. Controlling what is rendered and when. It also manages zoom and
- * focusing as they are subsections of rendering.
- */
 import controllers.CelestialBodyController;
 import controllers.GuiController;
 import controllers.Signal;
@@ -29,6 +16,14 @@ import javafx.scene.paint.Color;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 
+/**
+ * @author Logan
+ * @lastModified 12/1/2020
+ *
+ * @description The RenderService class manages the overarching rendering
+ * system. Controlling what is rendered and when. It also manages zoom and
+ * focusing as they are subsections of rendering.
+ */
 public class RenderService {
 
     // Instance
@@ -63,9 +58,10 @@ public class RenderService {
     private CelestialBodyController currentPlanetFocus;
 
 
-    /*
+    /**
      * RenderService constructor
      * @param _stage The stage given by JavaFX in main
+     * @throws Exception
      */
     private RenderService(Stage _stage) throws Exception {
         this.stage = _stage;
@@ -79,16 +75,17 @@ public class RenderService {
         this.initEvents();
     }
 
-    /*
+    /**
      * This version of getInstance should only be called by Main, it initializes the class singleton.
      * @param _stage The stage given by JavaFX in Main.
+     * @throws Exception
      */
     public static RenderService getInstance(Stage _stage) throws Exception {
         instance = new RenderService(_stage);
         return instance;
     }
 
-    /*
+    /**
      * Returns a reference to the singleton and errors if it has not yet been instantiated.
      */
     public static RenderService getInstance() {
@@ -98,9 +95,10 @@ public class RenderService {
         return instance;
     }
 
-    /*
+    /**
      * Initializes the Renderer, sets up the screen and begins the render cycle by calling run every set milliseconds.
      * @param _stage The window on which to build the canvas and scene
+     * @throws Exception
      */
     private void init() throws Exception {
         GuiController gc = GuiController.getInstance();
@@ -143,9 +141,9 @@ public class RenderService {
         });
     }
 
-    /*
-    Runs every frame and executes planet movement updates and rendering.
-    @param _gc GraphicsContext being used to render on.
+    /**
+     * Runs every frame and executes planet movement updates and rendering.
+     * @param _gc GraphicsContext being used to render on.
      */
     private synchronized void run(GraphicsContext _gc) {
         // Do update logic
@@ -205,50 +203,63 @@ public class RenderService {
         lastTick = System.currentTimeMillis();
     }
 
-    /*
-    Adds the Controller of a given CelestialBody to the gameObjects arraylist to be rendered.
-    @param _obj The CelestialBodyController that is going to be added.
+    /**
+     * Adds the Controller of a given CelestialBody to the gameObjects arraylist to be rendered.
+     * @param _obj The CelestialBodyController that is going to be added.
      */
     public void addInstance(CelestialBodyController _obj) {
         gameObjects.add(_obj);
     }
 
-    /*
-    Removes the Controller of a given CelestialBody from the gameObjects arraylist.
-    @param _obj The CelestialBodyController that is going to be removed.
+    /**
+     * Removes the Controller of a given CelestialBody from the gameObjects arraylist.
+     * @param _obj The CelestialBodyController that is going to be removed.
      */
     public void removeInstance(CelestialBodyController _obj) {
         gameObjects.remove(_obj);
     }
 
     //=================================== GETTERS ===================================//
+    // Return the current focus of the renderer (object in center of screen)
     public CelestialBodyController getFocus() {
         return this.currentPlanetFocus;
     }
 
+    // Return the current zoom * 2 for math purposes
     public double getZoom() {
         return this.ZOOM * 2;
     }
 
+    // Get the current x offset of the renderer accounting for screen size.
     public double getOffsetX() {
         return this.offsetX - this.canvas.getWidth() / 2;
     }
 
+    // Get the current y offset of the renderer accounting for screen size.
     public double getOffsetY() {
         return this.offsetY - this.canvas.getHeight() / 2;
     }
 
+    // Get the time elapsed since the program was started up.
     public long getElapsedTime() {
         return System.currentTimeMillis() - this.startTime;
     }
 
     //=================================== SETTERS ===================================//
+    /**
+     * Sets the focus of the renderer to a celestialBodyController
+     * @param _currentPlanetFocus The name of the celestial body controller to focus on.
+    */
     public void setFocus(String _currentPlanetFocus) {
         this.currentPlanetFocus = PlanetService.getPlanetController(_currentPlanetFocus);
     }
 
-    public void setZoom(double newZoom) {
-        this.goalZOOM = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+    /**
+     * Sets the attempted goal zoom of the renderer, clamped by the max and min zoom values.
+     * @param _newZoom  The new goal value for the zoom
+    */
+    public void setZoom(double _newZoom) {
+        this.goalZOOM = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, _newZoom));
     }
 
 }
