@@ -9,12 +9,12 @@ import org.json.JSONObject;
  */
 public class IPInfoApiTranslator extends APIConnect implements LocationApiInterface {
 
-    private static final String APIURL = "http://ip-api.com/json/";
+    private static final String apiUrl = "http://ip-api.com/json/";
     private static JSONObject obj;
 
 //Returns specified info (_placeInfo) on the users location. Returns that info in a String.
     public String getLocationInfo(String _placeInfo) {
-        String urlString = APIURL;
+        String urlString = apiUrl;
         obj = getConnection(urlString);
         try {
             return obj.getString(fixParams(_placeInfo));
