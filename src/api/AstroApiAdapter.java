@@ -25,5 +25,4 @@ public class AstroApiAdapter {
     public ArrayList<String> getBodyMoons(String _body) {
         return AstroAdapter.getBodyMoons(_body);
     }
-
 }
