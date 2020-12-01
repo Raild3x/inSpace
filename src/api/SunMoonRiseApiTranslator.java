@@ -1,5 +1,7 @@
 package api;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,24 +17,30 @@ public class SunMoonRiseApiTranslator extends APIConnect implements SunMoonRiseA
     private final String lat = locationData.getLocationInfo("Latitude");
     private final String lon = locationData.getLocationInfo("Longitude");
     private JSONObject obj;
+    private String data;
 
     /**
      * Returns time expected for sunrise/set and moon rise/set based on the
-     * users location. Uses IPGEOLocation API. Strings allowed can be
-     * found in the Info Accessible through API google doc.
+     * users location. Uses IPGEOLocation API. Strings allowed can be found in
+     * the Info Accessible through API google doc.
      */
     public String getSunMoonInfo(String _event) {
-        String url = astronomyUrl + apiKEY + "&lat=" + lat + "&long=" + lon;
-        String param = _event.toLowerCase();
-        obj = getConnection(url);
-
         try {
-            if (obj.getString(param).equals("-:-")) {
+            String url = astronomyUrl + apiKEY + "&lat=" + lat + "&long=" + lon;
+            String param = _event.toLowerCase();
+            System.out.println(param);
+            obj = getConnection(url);
+            this.data = obj.getString(param);
+            System.out.println(this.data);
+
+            if (this.data.equals("-:-")) {
                 return "No set / rise for this date.";
             } else {
-                return obj.getString(param);
+                return this.data;
             }
+
         } catch (JSONException ex) {
+            Logger.getLogger(SunMoonRiseApiTranslator.class.getName()).log(Level.SEVERE, null, ex);
             return "Invalid Params. Check spelling";
         }
     }
