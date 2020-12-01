@@ -30,12 +30,12 @@ public class AstroTestClass {
         System.out.println(testing.getBodyInfo("saturn", "semimajorAXis"));
         System.out.println(testing.getBodyInfo("uranus", "semimajorAXis"));
 
-        System.out.println(testing.getBodyInfo("sun", "moOns")); //Has no moons
-        System.out.println(testing.getBodyInfo("moon", "MooNS")); //Has no moons
+        System.out.println(testing.getBodyInfo("sun", "moOns"));
+        System.out.println(testing.getBodyInfo("moon", "MooNS"));
         System.out.println(testing.getBodyInfo("neptune", "moons"));
         System.out.println(testing.getBodyInfo("earth", "MOONS"));
-        System.out.println(testing.getBodyInfo("venus", "mOoNs"));  //Has no moons
-        System.out.println(testing.getBodyInfo("mercury", "moonS"));  //Has no moons
+        System.out.println(testing.getBodyInfo("venus", "mOoNs"));
+        System.out.println(testing.getBodyInfo("mercury", "moonS"));
         System.out.println(testing.getBodyInfo("mars", "mooNS"));
         System.out.println(testing.getBodyInfo("saturn", "moONs"));
         System.out.println(testing.getBodyInfo("uranus", "mOONs"));
@@ -52,14 +52,14 @@ public class AstroTestClass {
         System.out.println(testing.getBodyInfo("uranus", "mass"));
 
         System.out.println(testing.getBodyInfo("earth", "moons"));
-        System.out.println(testing.getBodyInfo("earth", "Mons"));// Invalid Param
+        System.out.println(testing.getBodyInfo("earth", "Mons"));
         System.out.println(testing.getBodyInfo("earth", "vol"));
-        System.out.println(testing.getBodyInfo("earth", "volume"));//Invalid param
+        System.out.println(testing.getBodyInfo("earth", "volume"));
         System.out.println(testing.getBodyInfo("earth", "sideralRotation"));
-        System.out.println(testing.getBodyInfo("earth", "sideralRot")); //Invalid param
+        System.out.println(testing.getBodyInfo("earth", "sideralRot"));
         System.out.println(testing.getBodyInfo("earth", "aroundPlanet"));
-        System.out.println(testing.getBodyInfo("earth", "planets its around")); //Invalid param
-        System.out.println(testing.getBodyInfo("earth", "axialtillt")); //Invalid param
+        System.out.println(testing.getBodyInfo("earth", "planets its around"));
+        System.out.println(testing.getBodyInfo("earth", "axialtillt"));
 
         System.out.println(testing.getBodyInfo("Epiméthée", "aroundPlanet"));
         System.out.println(testing.getBodyInfo("Phœbé","aroundPlanet"));
