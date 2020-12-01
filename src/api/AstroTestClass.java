@@ -59,17 +59,5 @@ public class AstroTestClass {
         System.out.println(testing.getBodyInfo("earth", "aroundPlanet"));
         System.out.println(testing.getBodyInfo("earth", "planets its around")); //Invalid param
         System.out.println(testing.getBodyInfo("earth", "axialtillt")); //Invalid param
-
-//        System.out.println(testing.getBodyInfo("Epiméthée"));
-//        System.out.println(testing.getBodyInfo("Phœbé"));
-//        System.out.println(testing.getBodyInfo("Hypérion"));
-//        System.out.println(testing.getBodyInfo("Hélène"));
-//        System.out.println(testing.getBodyInfo("S/2004 S 7"));
-//        System.out.println(testing.getBodyInfo("S/2004 S 12"));
-//        System.out.println(testing.getBodyInfo("Deïmos"));
-//        System.out.println(testing.getBodyInfo("Néreïde"));
-//        System.out.println(testing.getBodyInfo("S/2003 J 4"));
-//        System.out.println(testing.getBodyInfo("S/2017 J 5"));
-//        System.out.println(testing.getBodyInfo("S/2011 J 2"));
     }
 }
