@@ -1,18 +1,17 @@
 package api;
 
+import java.util.logging.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- *
- * @author sytiva
- */
 public class AstroApiTranslator extends APIConnect implements AstroApiInterface {
 
     private static final String ASTRONOMY_URL = "https://api.le-systeme-solaire.net/rest/bodies";
+    private static JSONObject OBJ;
 
     /*Returns info(_dataWanted) of a specific celestial body(_body). Info on what strings are allowed as _dataWanted
      *here: https://api.le-systeme-solaire.net/en/
@@ -20,14 +19,10 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
      */
     public String getBodyInfo(String _body, String _dataWanted) {
         String url = ASTRONOMY_URL + "/{" + _body + "}";
-        getConnection(url);
+        OBJ  = getConnection(url);
         try {
             if (noReturn == false) {
-                if (_dataWanted.toLowerCase().equals("moons")) {
-                    return Arrays.toString(getMoonsAsArray(_body));
-                } else {
-                    return OBJ.getString(fixParam(_dataWanted));
-                }
+                return OBJ.getString(fixParam(_dataWanted));
             }
         } catch (NullPointerException | JSONException ex) {
             System.out.print("Invalid params at getBodyInfo(String,String)");
@@ -42,7 +37,7 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
     public JSONObject getBodyInfo(String _body) {
         String url = ASTRONOMY_URL + "/{" + fixParam(_body) + "}";
         JSONObject err = null;
-        getConnection(url);
+        OBJ = getConnection(url);
         if (noReturn == false) {
             return OBJ;
         }
@@ -99,7 +94,7 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         return StringUtils.stripAccents(replaceWeirdLetters);
     }
 
-    // Returns a String array of the moons of a celestial body. If an array is needed, call
+    // Returns a String array of the moons of a celestial body. If an array is needed instead of a string, call
     // this instead of getBodyInfo(_body, "moons").Excludes the api rel link.
     public String[] getMoonsAsArray(String _body) {
         JSONArray moonArray;
@@ -118,7 +113,6 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                 startIndex = initString.indexOf(",");
                 endIndex = initString.indexOf("}");
                 moonArrStrVer[i] = initString.replace(initString.substring(startIndex, endIndex), toBeReplaced);
-                //System.out.println(moonArrStrVer[i]);
             }
 
             return moonArrStrVer;
@@ -127,5 +121,34 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
             System.out.println("A JSONException at getMoonsAsArray. Body may have no moons");
             return moonArrStrVer;
         }
+    }
+
+    // Returns a Arraylist of the moons of a celestial body. Excludes the api rel link.
+    public ArrayList<String> getBodyMoons(String _body) {
+        System.out.println("Attempting to get moons of " + _body);
+        ArrayList<String> moons = new ArrayList<>();
+
+        JSONArray jsonMoons;
+        try {
+            jsonMoons = new JSONArray(this.getBodyInfo(_body, "moons"));
+        } catch (JSONException ex) {
+            System.out.println("No moons available!");
+            //Logger.getLogger(AstroApiAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            return moons;
+        }
+
+        for (int i = 0; i < jsonMoons.length(); i++) {
+            try {
+                JSONObject jsonObj = jsonMoons.getJSONObject(i);
+                String moon = jsonObj.getString("rel");
+                moon = moon.substring(moon.lastIndexOf("/") + 1);
+                //System.out.println(moon);
+                moons.add(moon);
+            } catch (JSONException ex) {
+                System.out.println("Unable to getJSONObject from JSONArray");
+                //Logger.getLogger(AstroApiAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return moons;
     }
 }
