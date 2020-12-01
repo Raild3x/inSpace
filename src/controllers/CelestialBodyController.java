@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import events.SelectedEvent;
@@ -22,8 +17,9 @@ public class CelestialBodyController implements SelectedListener {
 
     private CelestialBody model;
 
-    /* Constructor for CelestialBodyController, sets up events
-     * @ _model The CelestialBody that the controller manages
+    /**
+     * Constructor for CelestialBodyController, sets up events.
+     * @param _model 
      */
     public CelestialBodyController(CelestialBody _model) {
         this.model = _model;
@@ -36,14 +32,18 @@ public class CelestialBodyController implements SelectedListener {
         return this.getName();
     }
 
-    // Called by RenderService, updates the orbital angle of the CelestialBody
-    // @param _dt The time that has passed since update was last called
+    /**
+     * Called by RenderService, updates the orbital angle of the CelestialBody
+     * @param _dt The time that has passed since update was last called
+    */
     public void moveCelestialBody(double _dt) {
         this.model.update(_dt);
     }
 
-    // Called by RenderService, draws the CelestialBody on the canvas
-    // @param _gc The graphics context on which to draw
+    /**
+     * Called by RenderService, draws the CelestialBody on the canvas
+     * @param _gc The graphics context on which to draw
+    */
     public void renderCelestialBody(GraphicsContext _gc) {
         this.model.render(_gc);
     }
@@ -106,7 +106,7 @@ public class CelestialBodyController implements SelectedListener {
         return this.model.getInfo(_infoType);
     }
 
-    /* Returns the distance from a given x and y coordinate to the nearest point on the CelestialBody's orbit.
+    /** Returns the distance from a given x and y coordinate to the nearest point on the CelestialBody's orbit.
      * @param _px The x position value of the point
      * @param _py The y position value of the point
      */
@@ -114,7 +114,7 @@ public class CelestialBodyController implements SelectedListener {
         return this.model.getDistToOrbit(_px, _py);
     }
 
-    /* Returns the distance from a given x and y coordinate CelestialBody.
+    /** Returns the distance from a given x and y coordinate CelestialBody.
      * @param _px The x position value of the point
      * @param _py The y position value of the point
      */
@@ -123,13 +123,15 @@ public class CelestialBodyController implements SelectedListener {
     }
 
     //=================================== SETTERS ===================================//
-    // Sets the boldOrbit value of the model to true or false
-    public void boldOrbit(boolean val) {
-        this.model.boldOrbit = val;
+    /** Sets the boldOrbit value of the model to true or false
+     * @param _val The Boolean to set the boldOrbit property to.
+    */
+    public void boldOrbit(boolean _val) {
+        this.model.boldOrbit = _val;
     }
 
     //=================================== EVENTS ===================================//
-    /* Fires when CelestialBody is selected and loads its moons
+    /** Fires when CelestialBody is selected and loads its moons
      * @param _cbc The controller that was selected (compares to see if they are the same)
      */
     @Override
@@ -140,7 +142,7 @@ public class CelestialBodyController implements SelectedListener {
         this.model.loadMoons();
     }
 
-    /* Fires when CelestialBody is unSelected and unloads its moons
+    /** Fires when CelestialBody is unSelected and unloads its moons
      * @param _cbc The controller that was unSelected (compares to see if they are the same)
      */
     @Override

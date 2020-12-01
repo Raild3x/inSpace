@@ -41,14 +41,15 @@ public class PlanetService {
     private PlanetService() {
         throw new IllegalStateException("Service class");
     }
-
+    
+    // Called by main to init the planets and their events.
     public static void init() {
         initPlanets();
         initPlanetEvents();
     }
 
     /*
-    Manages the creation of all CelestialBody objects
+     * Manages the creation of all CelestialBody objects
      */
     private static void initPlanets() {
         AstroApiAdapter AstroApi = new AstroApiAdapter();
@@ -111,16 +112,11 @@ public class PlanetService {
                     if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
                         System.out.println("Loading moons for: " + name);
                         try {
-                            int i = 0;
                             for (String moonName : controller.getMoons()) {
                                 CelestialBody moon = new CelestialBody(moonName, controller.getModel());
                                 Moons.add(moon);
-                                i++;
-                                if (i > 1) // test code (REMOVE)
-                                {
-                                    break;
-                                }
                             }
+                            Thread.sleep(1000);
                         } catch (Exception e) {
                             System.out.println("Issue loading moons: " + e);
                         }
@@ -131,7 +127,7 @@ public class PlanetService {
                 //Create moon controllers afterwards so it doesnt cause issues in the foreach
                 for (CelestialBody moon : Moons) {
                     CelestialBodyController cbc = new CelestialBodyController(moon);
-                    celestialBodyControllers.put(moon.name, cbc);
+                    celestialBodyControllers.put(moon.apiName, cbc);
                 }
 
                 System.out.println("LOADING COMPLETE!");
@@ -195,7 +191,7 @@ public class PlanetService {
         });
     }
 
-    /*
+    /**
      * Method to simplify creating new celestial bodies and their respective controllers
      * @param _cb The CelestialBody object to be used as the base for the controller
      */
@@ -220,6 +216,7 @@ public class PlanetService {
         lastSelected = closest;
     }
 
+    // Action method to unfocus the current planet and set the focus back to the Sun.
     public static void unFocus() {
         if (lastSelected != null) {
             System.out.println("Unfocusing!");
@@ -230,11 +227,21 @@ public class PlanetService {
         }
     }
 
+    /**
+     * Converts a double in terms of km to AU.
+     * @param _km Value in km to convert
+     * @return 
+     */
     public static double kmToAU(double _km) {
         return _km / 149598073;
     }
 
     //=================================== GETTERS ===================================//
+    /**
+     * Return the controller for the given planetName
+     * @param _planetName
+     * @return 
+     */
     public static CelestialBodyController getPlanetController(String _planetName) {
         return celestialBodyControllers.get(_planetName);
     }
