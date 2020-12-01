@@ -1,33 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package views;
 
 import controllers.MouseInputController;
 import controllers.GuiController;
-import controllers.Signal;
 import interfaces.InputView;
-import services.PlanetService;
-import services.RenderService;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
  * @author Logan
+ * @lastModified 12/1/2020
+ *
+ * @description The MouseView class acts to retrieve all mouse related input and
+ * pass it to the MouseInputController for handling.
  */
 public class MouseView implements InputView {
-    
+
     public static void init() {
         Canvas screen = GuiController.getInstance().getCanvas();
         MouseInputController mic = MouseInputController.getInstance();
         //set response to mouse events
-        screen.setOnMouseClicked((MouseEvent event) -> {
-            mic.mouseClicked(event);
-        });
         screen.setOnMouseDragged((MouseEvent event) -> {
             mic.mouseDragged(event);
         });

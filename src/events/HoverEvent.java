@@ -8,40 +8,46 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- *
  * @author Logan
+ * @lastModified 10/25/2020
+ *
+ * @description The HoverEvent class manages the firing of the methods of any
+ * connected HoverListeners
  */
 public class HoverEvent {
-    
-    /*public HoverEvent(Object source, String state) {
-        super(source);
-    }*/
-    
+
     private static Collection listeners = new HashSet();
-    
-    public static void addListener(HoverListener listener) {
-        listeners.add(listener);
+
+    // Adds a listener to the list for execution.
+    // @param _listener The listener to be added.
+    public static void addListener(HoverListener _listener) {
+        listeners.add(_listener);
     }
-    
-    public static void removeListener(HoverListener listener) {
-        listeners.remove(listener);
+
+    // Removes a listener from the list.
+    // @param _listener The listener to be removed.
+    public static void removeListener(HoverListener _listener) {
+        listeners.remove(_listener);
     }
-    
-    public static void fireHoverBegan(CelestialBodyController cbc) {
-        //HoverEvent event = new HoverEvent(this, "open");
+
+    // Called from PlanetService to fire any connected listeners HoverBegan
+    // @param _cbc The CelestialBodyController which was hovered over.
+    public static void fireHoverBegan(CelestialBodyController _cbc) {
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
             HoverListener listener = (HoverListener) iter.next();
-            listener.HoverBegan(cbc);
+            listener.HoverBegan(_cbc);
         }
     }
-    
-    public static void fireHoverEnded(CelestialBodyController cbc) {
+
+    // Called from PlanetService to fire any connected listeners HoverEnded
+    // @param _cbc The CelestialBodyController which is no longer being hovered over.
+    public static void fireHoverEnded(CelestialBodyController _cbc) {
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
             HoverListener listener = (HoverListener) iter.next();
-            listener.HoverEnded(cbc);
+            listener.HoverEnded(_cbc);
         }
     }
-    
+
 }

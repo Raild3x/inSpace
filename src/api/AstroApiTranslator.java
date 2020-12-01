@@ -1,5 +1,6 @@
 package api;
 
+import java.lang.Exception;
 import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,11 +24,7 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         getConnection(url);
         try {
             if (noReturn == false) {
-                if (_dataWanted.toLowerCase().equals("moons")) {
-                    return Arrays.toString(getMoonsAsArray(_body));
-                } else {
-                    return OBJ.getString(fixParam(_dataWanted));
-                }
+                return OBJ.getString(fixParam(_dataWanted));
             }
         } catch (NullPointerException | JSONException ex) {
             System.out.print("Invalid params at getBodyInfo(String,String)");
@@ -102,6 +99,7 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
     // Returns a String array of the moons of a celestial body. If an array is needed, call
     // this instead of getBodyInfo(_body, "moons").Excludes the api rel link.
     public String[] getMoonsAsArray(String _body) {
+        System.out.println("Getting moons as array");
         JSONArray moonArray;
         String[] moonArrStrVer = {};
 
