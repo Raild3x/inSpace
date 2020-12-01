@@ -107,28 +107,28 @@ public class PlanetService {
                 updateProgress(9, 9);
 
                 // Use api to get other planet moons
-                ArrayList<CelestialBody> Moons = new ArrayList<>();
-                celestialBodyControllers.forEach((name, controller) -> {
-                    if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
-                        System.out.println("Loading moons for: " + name);
-                        try {
-                            for (String moonName : controller.getMoons()) {
-                                CelestialBody moon = new CelestialBody(moonName, controller.getModel());
-                                Moons.add(moon);
-                            }
-                            Thread.sleep(1000);
-                        } catch (Exception e) {
-                            System.out.println("Issue loading moons: " + e);
-                        }
-                    }
-                });
-
-                System.out.println("Initializing Moon Controllers.");
-                //Create moon controllers afterwards so it doesnt cause issues in the foreach
-                for (CelestialBody moon : Moons) {
-                    CelestialBodyController cbc = new CelestialBodyController(moon);
-                    celestialBodyControllers.put(moon.apiName, cbc);
-                }
+//                ArrayList<CelestialBody> Moons = new ArrayList<>();
+//                celestialBodyControllers.forEach((name, controller) -> {
+//                    if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
+//                        System.out.println("Loading moons for: " + name);
+//                        try {
+//                            for (String moonName : controller.getMoons()) {
+//                                CelestialBody moon = new CelestialBody(moonName, controller.getModel());
+//                                Moons.add(moon);
+//                            }
+//                            Thread.sleep(1000);
+//                        } catch (Exception e) {
+//                            System.out.println("Issue loading moons: " + e);
+//                        }
+//                    }
+//                });
+//
+//                System.out.println("Initializing Moon Controllers.");
+//                //Create moon controllers afterwards so it doesnt cause issues in the foreach
+//                for (CelestialBody moon : Moons) {
+//                    CelestialBodyController cbc = new CelestialBodyController(moon);
+//                    celestialBodyControllers.put(moon.apiName, cbc);
+//                }
 
                 System.out.println("LOADING COMPLETE!");
                 return null;
