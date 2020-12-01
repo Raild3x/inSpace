@@ -16,7 +16,7 @@ import org.json.JSONObject;
  */
 public class APIConnect {
 
-    private static JSONObject OBJ;
+    private static JSONObject obj;
     protected static boolean noReturn = false;   //Ensures results of previous calls are not returned twice if current API call fails due to bad params
 
     protected static JSONObject getConnection(String _urlString) {
@@ -35,11 +35,11 @@ public class APIConnect {
             in.close();
             con.disconnect();
 
-            OBJ = new JSONObject(content.toString());
+            obj = new JSONObject(content.toString());
         } catch (IOException | JSONException ex) {
             System.out.println("Exception at getConnection");
             noReturn = true;
         }
-        return OBJ;
+        return obj;
     }
 }
