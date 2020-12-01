@@ -1,5 +1,4 @@
 package api;
-
 import java.util.logging.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -142,7 +141,7 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                 JSONObject jsonObj = jsonMoons.getJSONObject(i);
                 String moon = jsonObj.getString("rel");
                 moon = moon.substring(moon.lastIndexOf("/") + 1);
-                //System.out.println(moon);
+                System.out.println(moon);
                 moons.add(moon);
             } catch (JSONException ex) {
                 System.out.println("Unable to getJSONObject from JSONArray");
@@ -152,3 +151,4 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         return moons;
     }
 }
+
