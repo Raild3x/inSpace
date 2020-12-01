@@ -1,4 +1,4 @@
-package astroapi;
+package api;
 
 import org.json.JSONException;
 import org.json.JSONObject;
