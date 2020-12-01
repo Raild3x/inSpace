@@ -7,6 +7,13 @@ import org.json.JSONObject;
  *
  * @author sytiva
  */
+import java.util.ArrayList;
+import org.json.JSONObject;
+
+/**
+ *
+ * @author sytiva
+ */
 public class AstroApiAdapter {
     private final AstroApiInterface astroAdapter = new AstroApiTranslator();
 
@@ -25,4 +32,5 @@ public class AstroApiAdapter {
     public ArrayList<String> getBodyMoons(String _body) {
         return astroAdapter.getBodyMoons(_body);
     }
+
 }
