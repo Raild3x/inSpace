@@ -183,10 +183,11 @@ public class GuiController {
 
         return imageView;
     }
+
     //call for info from API
     public String getSunMoonRiseAdapter(String str) {
+
         SunMoonRiseAdapter sunMoon = new SunMoonRiseAdapter();
-        sunMoon.getSunMoonInfo(str);
         String event = sunMoon.getSunMoonInfo(str);
         return event;
     }
