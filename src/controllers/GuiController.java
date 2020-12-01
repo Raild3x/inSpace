@@ -1,5 +1,6 @@
 package controllers;
 
+import api.SunMoonRiseAdapter;
 import java.io.File;
 import views.GuiView;
 import javafx.scene.canvas.Canvas;
@@ -77,7 +78,7 @@ public class GuiController {
 
     public void recenter() {
         PlanetService.unFocus();
-        RenderService.getInstance().setZoom(RenderService.getInstance().getZoom()/4);
+        RenderService.getInstance().setZoom(RenderService.getInstance().getZoom() / 4);
     }
 
     public void zoomPlanet(String name) {
@@ -169,5 +170,12 @@ public class GuiController {
         }
 
         return imageView;
+    }
+
+    public String getSunMoonRiseAdapter(String str) {
+        SunMoonRiseAdapter sunMoon = new SunMoonRiseAdapter();
+        sunMoon.getSunMoonInfo(str);
+        String event = sunMoon.getSunMoonInfo(str);
+        return event;
     }
 }

@@ -1,5 +1,7 @@
-package astroapi;
+package api;
 
+import api.APIConnect;
+import api.LocationApiInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 
