@@ -1,6 +1,7 @@
 package api;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -9,11 +10,12 @@ import org.json.JSONException;
 public class IPInfoApiTranslator extends APIConnect implements LocationApiInterface {
 
     private static final String API_URL = "http://ip-api.com/json/";
+    private static JSONObject OBJ;
 
 //Returns specified info (_placeInfo) on the users location. Returns that info in a String.
     public String getLocationInfo(String _placeInfo) {
         String urlString = API_URL;
-        getConnection(urlString);
+        OBJ = getConnection(urlString);
         try {
             return OBJ.getString(fixParams(_placeInfo));
         } catch (JSONException ex) {
@@ -43,3 +45,4 @@ public class IPInfoApiTranslator extends APIConnect implements LocationApiInterf
         }
     }
 }
+
