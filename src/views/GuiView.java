@@ -247,7 +247,7 @@ public class GuiView implements HoverListener, SelectedListener {
         } catch (URISyntaxException ex) {
             Logger.getLogger(GuiView.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.guiController.removeGuiObject(this.infoPane);
         this.guiController.addGuiObject(this.infoPane);
 
 // moved this to a thread

@@ -112,11 +112,14 @@ public class PlanetService {
                     if (AstroApi.getBodyInfo(name, "isPlanet") == "true") {
                         System.out.println("Loading moons for: " + name);
                         try {
+                            int i = 0;
                             for (String moonName : controller.getMoons()) {
                                 CelestialBody moon = new CelestialBody(moonName, controller.getModel());
                                 Moons.add(moon);
+                                i++;
+                                if (i > 5)
+                                    break;
                             }
-                            Thread.sleep(1000);
                         } catch (Exception e) {
                             System.out.println("Issue loading moons: " + e);
                         }
@@ -219,7 +222,17 @@ public class PlanetService {
     public static void unFocus() {
         if (lastSelected != null) {
             System.out.println("Unfocusing!");
-            SelectedEvent.fireUnSelected(lastSelected);
+            try {
+                if (closest != null) {
+                    if (!lastSelected.getModel().moons.contains(closest.getModel().apiName)) {
+                        SelectedEvent.fireUnSelected(lastSelected);
+                    }
+                } else {
+                    SelectedEvent.fireUnSelected(lastSelected);
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
             lastSelected.boldOrbit(false);
             lastSelected = null;
             renderService.setFocus("Sun");

@@ -56,6 +56,7 @@ public class CelestialBodyController implements SelectedListener {
 
     // Called when we want to zoom in close enough to the planets to see their moons
     public void zoomIn() {
+        this.model.loadMoons();
         this.model.zoomIn();
     }
 
@@ -139,7 +140,6 @@ public class CelestialBodyController implements SelectedListener {
         if (_cbc != this) {
             return;
         }
-        this.model.loadMoons();
     }
 
     /** Fires when CelestialBody is unSelected and unloads its moons
@@ -150,7 +150,17 @@ public class CelestialBodyController implements SelectedListener {
         if (_cbc != this) {
             return;
         }
-        this.model.unloadMoons();
-        this.model.realisticSize = false;
+        if (!this.model.isPlanet && this.model.orbitingBody != null) {
+            System.out.println("Unloading "+this.model.orbitingBody.name);
+            this.model.orbitingBody.unloadMoons();
+            this.model.orbitingBody.realisticSize = false;
+            this.model.orbitingBody.displayOrbit = true;
+        } else {
+            System.out.println("Unloading "+this.getName());
+            this.model.unloadMoons();
+            this.model.realisticSize = false;
+            this.model.displayOrbit = true;
+        }
+        
     }
 }

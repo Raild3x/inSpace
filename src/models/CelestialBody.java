@@ -83,9 +83,9 @@ public class CelestialBody {
     public CelestialBody(String _apiName, CelestialBody _orbitingBody) {
         this.name = AstroApi.getBodyInfo(_apiName, "englishName");
         this.apiName = _apiName;
-        this.size = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "meanRadius"));
-        this.semiMajorAxis = PlanetService.kmToAU(Double.parseDouble(AstroApi.getBodyInfo(_apiName, "semimajorAxis")))*10;
-        this.eccentricity = .01; //Double.parseDouble(AstroApi.getBodyInfo(_apiName, "eccentricity"))*10;
+        this.size = Double.parseDouble(AstroApi.getBodyInfo(_apiName, "meanRadius"))*10;
+        this.semiMajorAxis = PlanetService.kmToAU(Double.parseDouble(AstroApi.getBodyInfo(_apiName, "semimajorAxis")));
+        this.eccentricity = 0; //Double.parseDouble(AstroApi.getBodyInfo(_apiName, "eccentricity"))*10;
         this.semiMinorAxis = (Math.sqrt(Math.pow(this.semiMajorAxis, 2) * (1 - Math.pow(this.eccentricity, 2))));
         this.orbitalPeriod = Math.sqrt(Math.pow((this.semiMajorAxis + this.semiMinorAxis) / 2, 3));
         this.color = Color.GRAY;
@@ -116,6 +116,7 @@ public class CelestialBody {
         this.semiMinorAxis = 0;
         this.eccentricity = 0;
         this.orbitalPeriod = 1;
+        this.displayOrbit = false;
         this.isPlanet = false;
         this.moons = null;
         try {
@@ -131,6 +132,8 @@ public class CelestialBody {
      */
     public void move(double _angle) {
         double zoom = RenderService.getInstance().getZoom();
+        if (this.realisticSize)
+            zoom *= 50;
         if (orbitingBody != null) {
             this.x = this.orbitingBody.getX() + zoom * this.semiMinorAxis * Math.sin(_angle) + this.eccentricity * zoom;
             this.y = this.orbitingBody.getY() - zoom * this.semiMajorAxis * Math.cos(_angle);
@@ -148,7 +151,7 @@ public class CelestialBody {
         double delta = ((Math.PI * 2) / this.orbitalPeriod) / 1000;
         // if were focused on something other than the sun then slow down time
         if (!RenderService.getInstance().getFocus().getName().equals("Sun")) {
-            delta /= 1000;
+            delta /= 1500;
         }
         this.angle += delta;
 
@@ -161,6 +164,9 @@ public class CelestialBody {
      */
     public void render(GraphicsContext _gc) {
         double zoom = RenderService.getInstance().getZoom();
+        if (this.realisticSize)
+            zoom *= 50;
+        
         if (this.orbitingBody != null) {
             if (this.displayOrbit) {
                 // draw orbit
@@ -184,17 +190,22 @@ public class CelestialBody {
             _gc.fillOval(this.x - size / 2, this.y - size / 2, size, size);
         }
         if (this.imageView != null) {
+            double x = this.x - size / 2;
+            double y = this.y - size / 2;
             if (this.name.equals("Saturn")) {
                 size *= 1.967;
+                x = this.x - size /1.9;
+                y = this.y - size /1.9;
             }
-            _gc.drawImage(this.imageView.getImage(), this.x - size / 2, this.y - size / 2, size, size);
+            _gc.drawImage(this.imageView.getImage(), x, y, size, size);
         }
     }
 
     // Action method to zoom in to the planet.
     public void zoomIn() {
-        RenderService.getInstance().setZoom(5000);
+        RenderService.getInstance().setZoom(1700 - this.size/50);
         this.realisticSize = true;
+        this.displayOrbit = false;
     }
 
     // Action method to add moons of CelestialBody to be rendered if it has any
@@ -222,7 +233,7 @@ public class CelestialBody {
     // Returns the adjusted size
     public double getSize() {
         double zoom = RenderService.getInstance().getZoom();
-        double size = (this.realisticSize) ? PlanetService.kmToAU(this.size) * (zoom * 50) : (this.size / 600) * (zoom / 350);
+        double size = (this.realisticSize) ? PlanetService.kmToAU(this.size)*2 * (zoom * 50) : (this.size / 600) * (zoom / 350);
         return (!this.name.equals("Sun")) ? (size) : (this.size / 50) * (zoom / 350);
     }
 
@@ -236,6 +247,9 @@ public class CelestialBody {
             return Integer.MAX_VALUE;
         }
         double zoom = RenderService.getInstance().getZoom();
+        if (this.realisticSize)
+            zoom *= 50;
+        
         double x = this.orbitingBody.getX() + this.eccentricity * zoom;
         double y = this.orbitingBody.getY();
         double rx = this.semiMajorAxis * zoom;
