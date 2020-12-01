@@ -89,6 +89,8 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                 JSONObject jsonObj = jsonMoons.getJSONObject(i);
                 String moon = jsonObj.getString("rel");
                 moon = moon.substring(moon.lastIndexOf("/") + 1);
+                if (moon.equals("") || moon.indexOf("0") >= 0)
+                    continue;
                 moons.add(moon);
             } catch (JSONException ex) {
                 System.out.println("Unable to getJSONObject from JSONArray");

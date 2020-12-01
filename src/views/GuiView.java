@@ -217,7 +217,7 @@ public class GuiView implements HoverListener, SelectedListener {
             Logger.getLogger(GuiView.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.guiController.removeGuiObject(this.infoPane);
         this.guiController.addGuiObject(this.infoPane);
 
         try {

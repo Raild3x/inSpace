@@ -54,7 +54,6 @@ public class GuiController {
         } catch (URISyntaxException ex) {
             Logger.getLogger(GuiController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     /**
