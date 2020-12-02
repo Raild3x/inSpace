@@ -173,13 +173,26 @@ public class GuiView implements HoverListener, SelectedListener {
         sunrise.setFont(Font.font(16));
         sunset.setFont(Font.font(16));
 
-        VBox nearMeInfo = new VBox();
-        nearMeInfo.getChildren().addAll(date, sunrise, sunset);
-        nearMeInfo.setStyle("-fx-text-fill : white; -fx-opacity : 1.0;");
-        nearMeInfo.setTranslateX(15);
-        nearMeInfo.setTranslateY(15);
+//        VBox nearMeInfo = new VBox();
+//        nearMeInfo.getChildren().addAll(date, sunrise, sunset);
+//        nearMeInfo.setStyle("-fx-text-fill : white; -fx-opacity : 1.0;");
+//        nearMeInfo.setTranslateX(15);
+//        nearMeInfo.setTranslateY(15);
+        this.guiController.addGuiObject(this.date);
+        this.guiController.addGuiObject(this.sunrise);
+        this.guiController.addGuiObject(this.sunset);
 
-        this.guiController.addGuiObject(nearMeInfo);
+        this.date.setTranslateX(-400);
+        this.date.setTranslateY(-390);
+        this.date.setAlignment(Pos.TOP_LEFT);
+
+        this.sunrise.setTranslateX(-400);
+        this.sunrise.setTranslateY(-370);
+        this.sunrise.setAlignment(Pos.TOP_LEFT);
+
+        this.sunset.setTranslateX(-400);
+        this.sunset.setTranslateY(-350);
+        this.sunrise.setAlignment(Pos.TOP_LEFT);
     }
 
     //======================================== EVENT RECIEVERS ===========================================//
