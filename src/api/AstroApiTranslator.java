@@ -7,6 +7,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ *
+ * @author Logan, Sytiva
+ * @lastModified 12/1/2020
+ *
+ * @description Retrieves data from the AstroApi and converts it into a usable
+ * format.
+ */
 public class AstroApiTranslator extends APIConnect implements AstroApiInterface {
 
     private static final String astronomyUrl = "https://api.le-systeme-solaire.net/rest/bodies";
@@ -71,7 +79,10 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
         }
     }
 
-    // Returns a Arraylist of the moons of a celestial body. Excludes the api rel link.
+    /** @author Logan
+     * Returns a Arraylist of the moons of a celestial body. Excludes the api rel link.
+     * @param _body A string with the apiName of the CelestialBody we want to get the moons of.
+    */
     public ArrayList<String> getBodyMoons(String _body) {
         System.out.println("Attempting to get moons of " + _body);
         ArrayList<String> moons = new ArrayList<>();
@@ -89,8 +100,9 @@ public class AstroApiTranslator extends APIConnect implements AstroApiInterface 
                 JSONObject jsonObj = jsonMoons.getJSONObject(i);
                 String moon = jsonObj.getString("rel");
                 moon = moon.substring(moon.lastIndexOf("/") + 1);
-                if (moon.equals("") || moon.indexOf("0") >= 0)
+                if (moon.equals("") || moon.indexOf("0") >= 0) {
                     continue;
+                }
                 moons.add(moon);
             } catch (JSONException ex) {
                 System.out.println("Unable to getJSONObject from JSONArray");
