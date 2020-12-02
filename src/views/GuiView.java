@@ -134,23 +134,23 @@ public class GuiView implements HoverListener, SelectedListener {
         this.title.setFont(Font.font(35));
 
         this.info.setAlignment(Pos.CENTER);
-        this.info.setStyle("-fx-text-fill : white;");
+        this.info.setStyle("-fx-text-fill : ghostwhite;  -fx-opacity : 1;");
         this.info.setFont(Font.font(15));
         Color col = Color.SILVER;
         // corner = new CornerRadii(10);
         //Background background = new Background(new BackgroundFill(col, corner, Insets.EMPTY));
         //info.setBackground(background);
-        info.setStyle("-fx-border-style: solid; -fx-background-color: black;");
+        info.setStyle(" -fx-background-color: lightgrey;");
 
         this.close.setText("Close");
         this.close.setAlignment(Pos.BOTTOM_CENTER);
-        this.close.setStyle("-fx-text-fill : white;");
-        this.close.setStyle("-fx-background-color : black;");
+        this.close.setStyle("-fx-text-fill : black;");
+        this.close.setStyle("-fx-background-color : lightgray;");
 
         this.zoomButton.setText("Zoom to Planet");
         this.zoomButton.setAlignment(Pos.BOTTOM_CENTER);
-        this.zoomButton.setStyle("-fx-text-fill : white;");
-        this.zoomButton.setStyle("-fx-background-color : black;");
+        this.zoomButton.setStyle("-fx-text-fill : black;");
+        this.zoomButton.setStyle("-fx-background-color : lightgray;");
 
         this.popUpButtons.getChildren().addAll(this.zoomButton, this.close);
         this.popUpButtons.setAlignment(Pos.CENTER);
@@ -160,7 +160,7 @@ public class GuiView implements HoverListener, SelectedListener {
         this.infoPane.setTranslateX(450);
         this.infoPane.setTranslateY(0);
         this.infoPane.setMaxSize(this.guiController.getCanvas().getWidth() / 3, this.guiController.getCanvas().getHeight() - 250);
-        this.infoPane.setOpacity(0.8);
+        this.infoPane.setOpacity(1);
         this.infoPane.setAlignment(Pos.CENTER);
         this.infoPane.getChildren().addAll(this.title, this.info, popUpButtons);
         this.infoPane.setSpacing(30.0);
@@ -173,11 +173,6 @@ public class GuiView implements HoverListener, SelectedListener {
         sunrise.setFont(Font.font(16));
         sunset.setFont(Font.font(16));
 
-//        VBox nearMeInfo = new VBox();
-//        nearMeInfo.getChildren().addAll(date, sunrise, sunset);
-//        nearMeInfo.setStyle("-fx-text-fill : white; -fx-opacity : 1.0;");
-//        nearMeInfo.setTranslateX(15);
-//        nearMeInfo.setTranslateY(15);
         this.guiController.addGuiObject(this.date);
         this.guiController.addGuiObject(this.sunrise);
         this.guiController.addGuiObject(this.sunset);
@@ -185,14 +180,21 @@ public class GuiView implements HoverListener, SelectedListener {
         this.date.setTranslateX(-400);
         this.date.setTranslateY(-390);
         this.date.setAlignment(Pos.TOP_LEFT);
+        this.date.setStyle("-fx-text-fill : white;   -fx-opacity : 0.7;");
+        // this.date.setStyle("-fx-background-color : lightgray;");
 
         this.sunrise.setTranslateX(-400);
         this.sunrise.setTranslateY(-370);
         this.sunrise.setAlignment(Pos.TOP_LEFT);
+        this.sunrise.setStyle("-fx-text-fill : white;   -fx-opacity : 0.7;");
+        //this.sunrise.setStyle("-fx-background-color : lightgray;");
 
         this.sunset.setTranslateX(-400);
         this.sunset.setTranslateY(-350);
-        this.sunrise.setAlignment(Pos.TOP_LEFT);
+        this.sunset.setAlignment(Pos.TOP_LEFT);
+        this.sunset.setStyle("-fx-text-fill : white;   -fx-opacity : 0.7;");
+        //this.sunset.setStyle("-fx-background-color : lightgray;");
+
     }
 
     //======================================== EVENT RECIEVERS ===========================================//
